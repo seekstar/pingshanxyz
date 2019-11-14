@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">深圳市坪山区民生诉求数据分析系统</h3>
       </div>
 
       <el-form-item prop="username">
@@ -45,9 +45,9 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin(loginForm)">登录</el-button>
 
-      <div style="position:relative">
+      <!-- <div style="position:relative">
         <div class="tips">
           <span>Username : admin</span>
           <span>Password : any</span>
@@ -60,7 +60,7 @@
         <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
           Or connect with
         </el-button>
-      </div>
+      </div> -->
     </el-form>
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
@@ -76,7 +76,9 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import SocialSign from './components/SocialSignin'
+import { login } from "@/api/user"
 import './components/TCaptcha.js'
+
 
 export default {
   name: 'Login',
@@ -161,14 +163,34 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
-      var captcha1 = new TencentCaptcha('2044637365', res => {
-        console.log(res)
-        if (res.ret == 0){
-          this.$refs.loginForm.validate(valid => {
-            if (valid) {
+    handleLogin(loginForm) {
+      // var captcha = new TencentCaptcha('2050079011', resp => {
+      //   if(resp.ret == 0){
+      //     login(loginForm.username, loginForm.password, resp.ticket, resp.randstr).then(resp => {
+      //       console.log(resp)
+      //     }).catch(resp => {
+
+      //     })
+      //   }
+      // });
+      // captcha.show();
+      /*
+      login(loginForm.username, loginForm.password).then(resp => {
+        console.log(resp)
+      })
+      */
+      // var captcha = new TencentCaptcha('2050079011', res => {
+        
+      // });
+      // captcha.show();
+
+
+      this.$refs.loginForm.validate(valid => {
+        if (valid) { //用户名密码格式合法
+          var captcha = new TencentCaptcha('2050079011', resp => {
+            if(resp.ret == 0){
               this.loading = true
-              this.$store.dispatch('user/login', this.loginForm)
+              this.$store.dispatch('user/login', {'username': this.loginForm.username, 'password': this.loginForm.password, 'ticket': resp.ticket, 'randstr': resp.randstr})
                 .then(() => {
                   this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
                   this.loading = false
@@ -176,14 +198,14 @@ export default {
                 .catch(() => {
                   this.loading = false
                 })
-            } else {
-              console.log('error submit!!')
-              return false
             }
-          })
+          });
+          captcha.show();
+        } else { //用户名密码格式非法
+          console.log('error submit!!')
+          return false
         }
-      });
-      captcha1.show(); // 显示验证码
+      })
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
@@ -271,20 +293,35 @@ $light_gray:#eee;
   min-height: 100%;
   width: 100%;
   background-color: $bg;
+  //background-image: url("https://pingshan.xyz/backgroundImage1.jpg");
   overflow: hidden;
+  // position:fixed;
+  // top: 0;
+  // left: 0;
+  // //width:100%;
+  // //height:100%;
+  // //min-width: 1000px;
+  // z-index:-10;
+  // zoom: 1;
+  // //background-color: #fff;
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  // -webkit-background-size: cover;
+  // -o-background-size: cover;
+  // background-position: center 0;
 
   .login-form {
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 200px 35px 0;
     margin: 0 auto;
     overflow: hidden;
   }
 
   .tips {
     font-size: 14px;
-    color: #fff;
+    //color: #fff;
     margin-bottom: 10px;
 
     span {

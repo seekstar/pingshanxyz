@@ -8,19 +8,19 @@
 
     <el-dialog :visible.sync="dialogTableVisible" width="80%" append-to-body>
       <div slot="title">
-        <span style="padding-right: 10px;">Error Log</span>
+        <span style="padding-right: 10px;">紧急事件日志</span>
         <el-button size="mini" type="primary" icon="el-icon-delete" @click="clearAll">Clear All</el-button>
       </div>
       <el-table :data="errorLogs" border>
-        <el-table-column label="Message">
+        <el-table-column label="事件列表">
           <template slot-scope="{row}">
             <div>
-              <span class="message-title">Msg:</span>
-              <el-tag type="danger">
+              <!-- <span class="message-title">Msg:</span> -->
+              <el-tag type="danger" size="medium">
                 {{ row.err.message }}
               </el-tag>
             </div>
-            <br>
+            <!-- <br>
             <div>
               <span class="message-title" style="padding-right: 10px;">Info: </span>
               <el-tag type="warning">
@@ -33,14 +33,14 @@
               <el-tag type="success">
                 {{ row.url }}
               </el-tag>
-            </div>
+            </div> -->
           </template>
         </el-table-column>
-        <el-table-column label="Stack">
+        <!-- <el-table-column label="Stack">
           <template slot-scope="scope">
             {{ scope.row.err.stack }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </el-dialog>
   </div>

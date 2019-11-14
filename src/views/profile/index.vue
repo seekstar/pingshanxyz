@@ -10,14 +10,14 @@
         <el-col :span="18" :xs="24">
           <el-card>
             <el-tabs v-model="activeTab">
-              <el-tab-pane label="Activity" name="activity">
+              <el-tab-pane label="政府公告" name="activity">
                 <activity />
               </el-tab-pane>
-              <el-tab-pane label="Timeline" name="timeline">
+              <el-tab-pane label="国家新闻" name="timeline">
                 <timeline />
               </el-tab-pane>
-              <el-tab-pane label="Account" name="account">
-                <account :user="user" />
+              <el-tab-pane label="账户信息" name="account">
+                <account />
               </el-tab-pane>
             </el-tabs>
           </el-card>

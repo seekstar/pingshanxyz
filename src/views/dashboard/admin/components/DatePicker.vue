@@ -11,8 +11,8 @@
       end-placeholder="结束日期"
       :picker-options="pickerOptions2"
       :default-time="['00:00:00', '23:59:59']"
-      @change="dateChange(dateData)"
-      size="mini">
+      @change="dateChange(dateData)">
+      <!-- size="small"> -->
     </el-date-picker>
   </div>
 </template>
@@ -109,6 +109,12 @@ function thisYear(){
 }
 
 export default {
+  props: {
+    dateData: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {
       pickerOptions2: {
@@ -138,8 +144,7 @@ export default {
             picker.$emit('pick', thisYear());
           }
         }]
-      },
-      dateData: thisDay()
+      }
     };
   },
   methods:{

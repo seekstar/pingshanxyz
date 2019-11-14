@@ -768,6 +768,7 @@ export default {
         ki,
         createImgUrl
       } = this
+
       const fmData = new FormData()
       fmData.append(
         field,
@@ -790,6 +791,15 @@ export default {
       this.reset()
       this.loading = 1
       this.setStep(3)
+      console.log('1111111111111111111');
+      
+      request({
+        url: '/user/info',
+        method: 'get',
+      }).then(resp => {
+        console.log(resp.data)
+      })
+
       request({
         url,
         method: 'post',
@@ -806,6 +816,7 @@ export default {
             this.errorMsg = lang.fail
             this.$emit('crop-upload-fail', err, field, ki)
           }
+          console.log('222222222222222222222');
         })
     },
     closeHandler(e) {

@@ -7,6 +7,24 @@ import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
+function gen_series(data) {
+  //console.log(data);
+  var series = [];
+  for (var it in data) {
+    //console.log(it);
+    series.push({
+      name: data[it].name,
+      type: 'bar',
+      stack: 'vistors',
+      barWidth: '60%',
+      data: data[it].data,
+      animationDuration
+    })
+  }
+  //console.log(JSON.stringify(series));
+  return series;
+}
+
 const animationDuration = 6000
 
 export default {
@@ -59,10 +77,10 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions({ street, d1, d2, d3 } = {}) {
+    setOptions(data) {
       this.chart.setOption({
         title: {
-            text: '各街道民生事件情况'
+            text: data.title,
         },
         tooltip: {
           trigger: 'axis',
@@ -71,50 +89,40 @@ export default {
           }
         },
         grid: {
-          top: '20%',
-          left: '2%',
-          right: '2%',
+          top: '10%',
+          left: '0%',
+          right: '10%',
           bottom: '3%',
           containLabel: true
         },
         xAxis: [{
-          type: 'category',
-          data: street,
-          axisTick: {
-            alignWithLabel: true
-          }
-        }],
-        yAxis: [{
           type: 'value',
           axisTick: {
             show: false
           }
         }],
+        yAxis: [{
+          type: 'category',
+          data: data.street,
+          axisTick: {
+            alignWithLabel: true
+          },
+          axisLabel: {
+            textStyle: {
+              fontWeight: 'bold',
+              fontSize: 20
+            }
+          }
+        }],
         legend: {
-          data: ['市容城管', '禽畜养殖', '市政/公共设施']
+          show: true,
+          type: 'scroll',
+          orient: 'vertical',
+          right: 0,
+		      top: 20,
+          data: data.type.name
         },
-        series: [{
-          name: '市容城管',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: d1,
-          animationDuration
-        }, {
-          name: '禽畜养殖',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: d2,
-          animationDuration
-        }, {
-          name: '市政/公共设施',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: d3,
-          animationDuration
-        }]
+        series: gen_series(data.type)
       })
     }
   }

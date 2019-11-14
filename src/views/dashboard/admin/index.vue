@@ -1,84 +1,165 @@
 <template>
   <div class="dashboard-editor-container">
-    <github-corner class="github-corner" />
+    <el-tooltip content="坪山区人民政府官网" effect="dark" placement="bottom">
+     <github-corner class="github-corner"/>
+    </el-tooltip>
 
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
+    <!-- <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart :chart-data="lineChartData" />
-    </el-row>
+    </el-row> -->
 
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <date-picker-quarter />
+    <!-- BarChart -->
+    <el-row class="chart-wrapper">
+      <el-col>
+        <el-row style="background:#fff;padding:16px 48px 0px;margin-bottom:32px;">
+          <span class="demonstration">选择日期：</span>
+          <el-date-picker
+            v-model="Month"
+            type="month"
+            placeholder="选择月"
+            :picker-options="pickerOptionsMonth"
+            :format="displayTypeMonth"
+            @change="monthChange(Month)"
+          ></el-date-picker>
+        </el-row>
+        <el-row style="background:#fff;padding:0px 48px 0px;margin-bottom:32px;">
+          <bar-chart :chart-data="BarChartData" />
+        </el-row>
+      </el-col>
     </el-row>
 
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
+      <!-- PieChart -->
+      <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <el-row >
-            <date-picker @dateChange="dateChange1" />
+          <el-row style="background:#fff;padding:0px 8px 0;margin-bottom:16px;">
+            <date-picker @dateChange="dateChange1" :dateData="date1"/>
           </el-row>
-          <el-row >
+          <el-row>
             <pie-chart :chart-data="PieChartData" />
           </el-row>
         </div>
       </el-col>
-
-      <el-col :xs="24" :sm="24" :lg="8">
+      <!-- SunburstChart -->
+      <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <el-row >
+          <el-row style="background:#fff;padding:0px 8px 0;margin-bottom:16px;">
+            <el-dropdown @command="handleCommand">
+              <el-button type="primary">
+                {{ dateType }}
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="1">所有时间范围</el-dropdown-item>
+                <el-dropdown-item command="2">按月份选择日期</el-dropdown-item>
+                <el-dropdown-item command="3">按季度选择日期</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+
             <el-date-picker
-              v-model="Month"
+              v-if="show2"
+              v-model="Month2"
               type="month"
               placeholder="选择月"
-              :picker-options="pickerOptionsMonth"
-              :format="displayTypeMonth"
-              @change="monthChange(Month)">
-            </el-date-picker>
-          </el-row>
-          <el-row >
-            <bar-chart :chart-data="BarChartData" />
-          </el-row>
-        </div>
-      </el-col>
+              format="yyyy年MM月"
+              @change="dateChange2(Month2)"
+            ></el-date-picker>
 
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <sunburst-chart :chart-data="SunburstChartData" />
+            <date-picker-quarter v-if="show3" @dateChange="dateChange3" :quarter="quarter" />
+          </el-row>
+          <el-row>
+            <sunburst-chart :chart-data="SunburstChartData" />
+          </el-row>
         </div>
       </el-col>
     </el-row>
 
-    <el-row :gutter="8">
-      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
-        <transaction-table />
+    <el-row :gutter="32">
+      <el-col
+        :xs="{span: 24}"
+        :sm="{span: 24}"
+        :md="{span: 24}"
+        :lg="{span: 12}"
+        :xl="{span: 12}"
+      >
+        <transaction-table :list="list" :msgId="msgId" @setData="setData"/>
       </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
+
+      <el-col
+        :xs="{span: 24}"
+        :sm="{span: 24}"
+        :md="{span: 24}"
+        :lg="{span: 12}"
+        :xl="{span: 12}"
+      >      
+        <el-row style="background:#fff;padding:32px 48px 0px;margin-bottom:0px;">
+          <span class="demonstration">选择日期：</span>
+          <el-date-picker
+            v-model="Month3"
+            type="month"
+            placeholder="选择月"
+            :picker-options="pickerOptionsMonth"
+            :format="displayTypeMonth3"
+            @change="monthChange3(Month3)"
+          ></el-date-picker>
+        </el-row>
+        <el-row style="background:#fff;padding:32px 50px 50px;margin-bottom:16px;">
+          <ping-shan-map :chart-data="pingShanMapData"/>
+        </el-row>
+      </el-col>
+
+      <!-- <el-col
+        :xs="{span: 24}"
+        :sm="{span: 12}"
+        :md="{span: 12}"
+        :lg="{span: 6}"
+        :xl="{span: 6}"
+        style="margin-bottom:30px;"
+      >
         <todo-list />
       </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
+      <el-col
+        :xs="{span: 24}"
+        :sm="{span: 12}"
+        :md="{span: 12}"
+        :lg="{span: 6}"
+        :xl="{span: 6}"
+        style="margin-bottom:30px;"
+      >
         <box-card />
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
 
 <script>
-import GithubCorner from '@/components/GithubCorner'
-import PanelGroup from './components/PanelGroup'
-import RaddarChart from './components/RaddarChart'
-import PieChart from './components/PieChart'
-import BarChart from './components/BarChart'
-import TransactionTable from './components/TransactionTable'
-import TodoList from './components/TodoList'
-import BoxCard from './components/BoxCard'
-import LineChart from './components/LineChart'
-import SunburstChart from './components/SunburstChart'
-import DatePicker from './components/DatePicker'
-import DatePickerQuarter from './components/DatePickerQuarter'
-import DropDown from './components/DropDown'
+import GithubCorner from "@/components/GithubCorner";
+import PanelGroup from "./components/PanelGroup";
+import RaddarChart from "./components/RaddarChart";
+import PieChart from "./components/PieChart";
+import BarChart from "./components/BarChart";
+import TransactionTable from "./components/TransactionTable";
+import TodoList from "./components/TodoList";
+import BoxCard from "./components/BoxCard";
+import LineChart from "./components/LineChart";
+import SunburstChart from "./components/SunburstChart";
+import DatePicker from "./components/DatePicker";
+import DatePickerQuarter from "./components/DatePickerQuarter";
+import DropDown from "./components/DropDown";
+import PingShanMap from './components/PingShanMap';
+import { MessageBox, Message } from 'element-ui';
+import {
+  getPieChartData,
+  getBarChartData,
+  getSunburstChartData,
+  getAbnormalData,
+  getDetailedData,
+  getMapData
+} from "@/api/getdata";
 
-function getNowDate(){
+function getNowDate() {
   //将当前时间初始化为2018-10-30 + 当前时间
   var now = new Date();
   now.setFullYear(2018);
@@ -87,62 +168,292 @@ function getNowDate(){
   return now;
 }
 
+function thisDay(){
+  //设置起始时间为今天刚开始的时刻
+  var start = getNowDate();
+  start.setHours(0);
+  start.setMinutes(0);
+  start.setSeconds(0);
+
+  //设置起始时间为明天刚开始的时刻
+  var end = new Date();
+  end.setTime(start.getTime());
+  end.setDate(end.getDate() + 1);
+  return [start, end];
+}
+
 const ChartData = {
   types_street: {
-    street: ['龙田街道', '坪山街道', '碧岭街道', 'Thu', 'Fri', 'Sat', 'Sun'],
-    d1: [79, 52, 200, 334, 390, 330, 220],
-    d2: [80, 52, 200, 334, 390, 330, 220],
-    d3: [30, 52, 200, 334, 390, 330, 220]
+    title: "各街道民生事件情况",
+    street: [
+      "碧岭街道",
+      "龙田街道",
+      "马峦街道",
+      "石井街道",
+      "坪山街道",
+      "坑梓街道"
+    ],
+    type: [
+      {
+        name: "安全隐患",
+        data: [0, 0, 0, 0, 1, 0]
+      },
+      {
+        name: "文体旅游",
+        data: [0, 0, 0, 0, 1, 0]
+      },
+      {
+        name: "教育卫生",
+        data: [0, 1, 0, 0, 2, 0]
+      },
+      {
+        name: "组织人事",
+        data: [0, 0, 0, 0, 0, 0]
+      },
+      {
+        name: "党建群团",
+        data: [0, 0, 0, 0, 0, 0]
+      },
+      {
+        name: "党纪政纪",
+        data: [0, 0, 0, 0, 0, 0]
+      },
+      {
+        name: "民政服务",
+        data: [0, 0, 0, 0, 0, 0]
+      },
+      {
+        name: "统一战线",
+        data: [0, 1, 0, 0, 0, 0]
+      },
+      {
+        name: "社区管理",
+        data: [0, 2, 0, 0, 0, 0]
+      },
+      {
+        name: "治安维稳",
+        data: [0, 0, 0, 0, 0, 0]
+      },
+      {
+        name: "环保水务",
+        data: [4, 15, 4, 1, 9, 3]
+      },
+      {
+        name: "规土城建",
+        data: [0, 1, 0, 0, 1, 0]
+      },
+      {
+        name: "市容环卫",
+        data: [1, 4, 2, 0, 13, 8]
+      },
+      {
+        name: "市政设施",
+        data: [1, 7, 1, 0, 5, 3]
+      },
+      {
+        name: "专业事件采集",
+        data: [0, 0, 0, 0, 0, 0]
+      },
+      {
+        name: "交通运输",
+        data: [0, 12, 0, 0, 0, 1]
+      },
+      {
+        name: "劳动社保",
+        data: [0, 0, 0, 2, 1, 0]
+      },
+      {
+        name: "食药市监",
+        data: [1, 1, 0, 0, 0, 0]
+      }
+    ]
   },
   properties: {
+    title: "民生诉求分析",
+    //types: ['求决', '投诉', '咨询', "建议", '感谢', '其他'],
     properties: [
-        {
-          name: '投诉',
-          value: 320
-        },{
-          name: '感谢',
-          value: 240
-        },{
-          name: '建议',
-          value: 149
-        },{
-          name: "咨询",
-          value: 100
-        },{
-          name: "其他",
-          value: 120
-        }
-      ]
+      {
+        name: "求决",
+        value: 30
+      },
+      {
+        name: "投诉",
+        value: 6328
+      },
+      {
+        name: "咨询",
+        value: 308
+      },
+      {
+        name: "建议",
+        value: 118
+      },
+      {
+        name: "感谢",
+        value: 10
+      },
+      {
+        name: "其他",
+        value: 1
+      }
+    ]
+  },
+  pingShanMapData: {
+    zoom: 12,
+    data: [
+      {name: '马峦社区', value: [114.3382030000,22.6445380000,279]},
+      {name: '金龟社区', value: [114.4064610000,22.6637440000,279]},
+      {name: '汤坑社区', value: [114.3310790000,22.6788050000,100]},
+      {name: '江岭社区', value: [114.3625960000,22.6920200000,120]},
+      {name: '坪环社区', value: [114.3547400000,22.6880960000,161]},
+      {name: '坪山社区', value: [114.3572650000,22.6962590000,134]},
+      {name: '沙坣社区', value: [114.3774770000,22.6901530000,134]},
+      {name: '六联社区', value: [114.3435272387,22.6896070615,134]},
+      {name: '田头社区', value: [114.4108370000,22.6971970000,134]},
+      {name: '碧岭社区', value: [114.2956630000,22.6734200000,134]},
+      {name: '沙湖社区', value: [114.3265520000,22.6790900000,134]},
+      {name: '田心社区', value: [114.4219430000,22.7003510000,134]},
+      {name: '六和社区', value: [114.3499140000,22.7079190000,134]},
+      {name: '竹坑社区', value: [114.3950740000,22.7157730000,134]},
+      {name: '老坑社区', value: [114.3693120000,22.7348660000,134]},
+      {name: '坑梓社区', value: [114.3900130000,22.7530310000,134]},
+      {name: '和平社区', value: [114.3504321337,22.6947184506,134]},
+      {name: '石井社区', value: [114.3909780000,22.6976250000,134]},
+      {name: '南布社区', value: [114.3756070000,22.7053400000,134]},
+      {name: '金沙社区', value: [114.4040810000,22.7586770000,134]},
+      {name: '龙田社区', value: [114.3728410000,22.7533460000,134]},
+      {name: '沙田社区', value: [114.4044440000,22.7617640000,134]},
+      {name: '秀新社区', value: [114.3812230000,22.7468730000,134]}
+    ],
+    boundary: [
+      [114.452581, 22.697309],
+      [114.449315, 22.70566],
+      [114.441145, 22.708549],
+      [114.434593, 22.706961],
+      [114.427974, 22.720416],
+      [114.415309, 22.719353],
+      [114.410035, 22.730609],
+      [114.4145, 22.73194],
+      [114.414108, 22.738832],
+      [114.420398, 22.743692],
+      [114.420425, 22.759468],
+      [114.426993, 22.761319],
+      [114.42387, 22.765075],
+      [114.429311, 22.767592],
+      [114.425304, 22.768237],
+      [114.417843, 22.783315],
+      [114.411224, 22.787075],
+      [114.402523, 22.782462],
+      [114.401237, 22.767654],
+      [114.395177, 22.764818],
+      [114.373537, 22.774268],
+      [114.365708, 22.770751],
+      [114.354784, 22.7748],
+      [114.342961, 22.75367],
+      [114.346203, 22.750799],
+      [114.344027, 22.742426],
+      [114.349294, 22.735691],
+      [114.345716, 22.733135],
+      [114.346395, 22.722007],
+      [114.341056, 22.71544],
+      [114.326377, 22.709227],
+      [114.328365, 22.706899],
+      [114.324883, 22.698965],
+      [114.313775, 22.692297],
+      [114.313014, 22.686914],
+      [114.307203, 22.689324],
+      [114.303557, 22.686363],
+      [114.301809, 22.688871],
+      [114.297474, 22.68505],
+      [114.300662, 22.682961],
+      [114.299034, 22.680614],
+      [114.291647, 22.683936],
+      [114.29045, 22.680076],
+      [114.279297, 22.679057],
+      [114.272958, 22.668606],
+      [114.273557, 22.663199],
+      [114.283316, 22.650317],
+      [114.291755, 22.646275],
+      [114.296384, 22.637391],
+      [114.29276, 22.630224],
+      [114.296165, 22.625118],
+      [114.300362, 22.627073],
+      [114.302969, 22.62457],
+      [114.310666, 22.636283],
+      [114.31939, 22.630229],
+      [114.32578, 22.632016],
+      [114.333758, 22.629011],
+      [114.340651, 22.63219],
+      [114.344965, 22.629413],
+      [114.349715, 22.637332],
+      [114.355434, 22.637582],
+      [114.358174, 22.632589],
+      [114.3706, 22.628479],
+      [114.372844, 22.638683],
+      [114.380465, 22.638772],
+      [114.380148, 22.644426],
+      [114.376612, 22.646506],
+      [114.380819, 22.650615],
+      [114.386735, 22.643849],
+      [114.394515, 22.642634],
+      [114.395405, 22.647916],
+      [114.414207, 22.65461],
+      [114.418223, 22.659911],
+      [114.424238, 22.658831],
+      [114.442264, 22.669697],
+      [114.43804, 22.670297],
+      [114.435021, 22.684469],
+      [114.448562, 22.690427],
+      [114.452581, 22.697309]
+    ]
   },
   status_type: {
-      tree: [{
-          name: '处置中',
-          children: [{
-              value: 3,
-              name: '市容环卫'
-          }, {
-              value: 5,
-              name: '环保水务'
-          }]
-      }, {
-          name: '超期结办',
-          children: [{
-              name: '市容环卫',
-              value: 4
-          }, {
-              name: '环保水务',
-              value: 2
-          }]
-      }, {
-          name: '按期结办',
-          children: [{
-              name: '市容环卫',
-              value: 2
-          }, {
-              name: '环保水务',
-              value: 3
-          }]
-      }]
+    title: "事件结办分析",
+    tree: [
+      {
+        name: "处置中",
+        children: [
+          {
+            value: 3,
+            name: "市容环卫"
+          },
+          {
+            value: 5,
+            name: "环保水务"
+          }
+        ]
+      },
+      {
+        name: "超期结办",
+        children: [
+          {
+            name: "市容环卫",
+            value: 4
+          },
+          {
+            name: "环保水务",
+            value: 2
+          },
+          {
+            name: "fuck",
+            value: 4
+          }
+        ]
+      },
+      {
+        name: "按期结办",
+        children: [
+          {
+            name: "市容环卫",
+            value: 2
+          },
+          {
+            name: "环保水务",
+            value: 3
+          }
+        ]
+      }
+    ]
   },
 
   newVisitis: {
@@ -161,10 +472,10 @@ const ChartData = {
     expectedData: [130, 140, 141, 142, 145, 150, 160],
     actualData: [120, 82, 91, 154, 162, 140, 130]
   }
-}
+};
 
 export default {
-  name: 'DashboardAdmin',
+  name: "DashboardAdmin",
   components: {
     GithubCorner,
     PanelGroup,
@@ -178,45 +489,325 @@ export default {
     SunburstChart,
     DatePicker,
     DatePickerQuarter,
-    DropDown
+    DropDown,
+    PingShanMap
   },
   data() {
     return {
-      BarChartData: ChartData.types_street,
+      allErrorLog: [],
       PieChartData: ChartData.properties,
+      BarChartData: ChartData.types_street,
       SunburstChartData: ChartData.status_type,
       lineChartData: ChartData.newVisitis,
-      lineChartDataTable: [ChartData.newVisitis, ChartData.messages, ChartData.purchases, ChartData.shoppings],
-      fuckdata: 'asd',
+      lineChartDataTable: [
+        ChartData.newVisitis,
+        ChartData.messages,
+        ChartData.purchases,
+        ChartData.shoppings
+      ],
+      pingShanMapData: ChartData.pingShanMapData,
       Month: getNowDate(),
-      displayTypeMonth: "yyyy年MM月",
-      pickerOptionsMonth:{
-        shortcuts: [{
-          text: '今天',
-          onClick(picker){
-            const now = new Date();
-            picker.$emit('pick', now);
+      Month2: getNowDate(),
+      Month3: getNowDate(),
+      displayTypeMonth: "yyyy年MM月dd日",
+      //displayTypeMonth2: "yyyy年MM月dd日",第二个月份选择器不用快捷选择
+      displayTypeMonth3: "yyyy年MM月dd日",
+      date1: thisDay(),
+      quarter: getNowDate(),
+      dateType: "所有时间范围",
+      show2: false,
+      show3: false,
+      pickerOptionsMonth: {
+        shortcuts: [
+          {
+            text: "今天",
+            onClick(picker) {
+              const now = getNowDate();
+              picker.$emit("pick", now);
+            }
           }
-        }]
-      }
-    }
+        ]
+      },
+      list: [],
+      msgId: 0,
+      interval: null
+    };
   },
   methods: {
+    setPieChartData(from, to) {
+      getPieChartData(
+        from,
+        to
+      ).then(resp => {
+        //console.log(resp.data)
+        if(JSON.stringify(this.PieChartData) != JSON.stringify({ title: "民生诉求分析", properties: resp.data }))
+          this.PieChartData = { title: "民生诉求分析", properties: resp.data };
+      });
+    },
+    setBarChartData(year, month) {
+      getBarChartData(year, month).then(resp => {
+        //console.log(resp.data);
+        var tmp = {
+          title: "各街道民生事件情况",
+          street: [
+            "碧岭街道",
+            "龙田街道",
+            "马峦街道",
+            "石井街道",
+            "坪山街道",
+            "坑梓街道",
+            "-"
+          ],
+          type: [
+            { name: "安全隐患", data: [] },
+            { name: "文体旅游", data: [] },
+            { name: "教育卫生", data: [] },
+            { name: "组织人事", data: [] },
+            { name: "党建群团", data: [] },
+            { name: "党纪政纪", data: [] },
+            { name: "民政服务", data: [] },
+            { name: "统一战线", data: [] },
+            { name: "社区管理", data: [] },
+            { name: "治安维稳", data: [] },
+            { name: "环保水务", data: [] },
+            { name: "规土城建", data: [] },
+            { name: "市容环卫", data: [] },
+            { name: "市政设施", data: [] },
+            { name: "专业事件采集", data: [] },
+            { name: "交通运输", data: [] },
+            { name: "劳动社保", data: [] },
+            { name: "食药市监", data: [] },
+            { name: "-", data: [] }
+          ]
+        };
+        for (var i = 0; i < tmp.type.length; ++i) {
+          for (var j = 0; j < tmp.street.length; ++j) {
+            var OK = false;
+            for (var now of resp.data) {
+              if (now.name == tmp.type[i].name && now.street == tmp.street[j]) {
+                OK = true;
+                tmp.type[i].data.push(now.value);
+                break;
+              }
+            }
+            if (OK == false) {
+              tmp.type[i].data.push(0);
+            }
+          }
+        }
+        //console.log(tmp);
+        //console.log(JSON.stringify(tmp))
+        if(JSON.stringify(this.BarChartData) != JSON.stringify(tmp))
+          this.BarChartData = tmp;
+      });
+    },
+    setSunburstChartData(op, year, date) {
+      getSunburstChartData(op, year, date).then(resp => {
+        //console.log(resp.data);
+        var sum = 0;
+        for(var item of resp.data){
+          sum += item.value;
+        }
+        var tmp = {
+          title: "事件办结分析",
+          tree: [
+            {
+              name: "处置中",
+              children: []
+            },
+            {
+              name: "按期办结",
+              children: []
+            },
+            {
+              name: "超期办结",
+              children: []
+            }
+          ]
+        };
+        var trans = {"处置中": 0, "按期办结": 1, "超期办结": 2};
+        for(var item of resp.data){
+          if(item.value * 100 < sum){
+            var OK = false;
+            for(var i = 0; i < tmp.tree[trans[item.status]].children.length; ++i){
+              if(tmp.tree[trans[item.status]].children[i].name == '其他'){
+                OK = true;
+                tmp.tree[trans[item.status]].children[i].value += item.value;
+                break;
+              }
+            }
+            if(OK == false){
+              tmp.tree[trans[item.status]].children.push({'name': '其他', 'value': item.value});
+            }
+          }else{
+            tmp.tree[trans[item.status]].children.push({'name': item.name, 'value': item.value});
+          }
+        }
+        if(JSON.stringify(this.SunburstChartData) != JSON.stringify(tmp))
+          this.SunburstChartData = tmp;
+      });
+    },
+    setAbnormalData(){
+      getAbnormalData().then(resp => {
+        //console.log(resp.data)
+        for(var item of resp.data){
+          if(this.allErrorLog.indexOf(item) == -1){
+            Message({
+              message: item,
+              type: "error",
+              duration: 5 * 1000
+            });
+            this.$store.dispatch('errorLog/addErrorLog',
+              {
+                err:{
+                  message: item
+                }
+              }
+            )
+            this.allErrorLog.push(item)
+          }
+        }
+      }).catch(resp => {
+        console.log('!!!!!!!!!!!!!!!!')
+      })
+    },
     handleSetLineChartData(type) {
-      this.lineChartData = this.lineChartDataTable[type]
+      this.lineChartData = this.lineChartDataTable[type];
     },
-    dateChange1(date){
-      console.log(date)
+    dateChange1(date) {
+      this.date1 = date
+      //console.log(date);
+      this.setPieChartData(date[0], date[1]);
     },
-    monthChange(date){
-      if(date.getDate() == 1 && date.getHours() == 0 && date.getMinutes() == 0 && date.getSeconds() == 0)
+    dateChange2(date) {
+      //console.log(date);
+      this.setSunburstChartData(2, date.getFullYear(), date.getMonth() + 1);
+    },
+    dateChange3(date) {
+      //console.log(date);
+      this.setSunburstChartData(3, date.getFullYear(), date.getMonth() + 1);
+    },
+    handleCommand(command) {
+      if (command == "1") {
+        this.dateType = "所有时间范围";
+        this.show2 = false;
+        this.show3 = false;
+        /* 更新图表数据 */
+        this.setSunburstChartData(1, 1, 1);
+      } else if (command == "2") {
+        this.dateType = "按月份选择日期";
+        this.show2 = true;
+        this.show3 = false;
+      } else {
+        this.dateType = "按季度选择日期";
+        this.show2 = false;
+        this.show3 = true;
+      }
+    },
+    monthChange(date) {
+      //if (date.getDate() == 1 && date.getHours() == 0 && date.getMinutes() == 0 && date.getSeconds() == 0) {
+      if (date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds() == 1) {
+        //查询一个月的统计数据
         this.displayTypeMonth = "yyyy年MM月";
-      else
+        this.setBarChartData(date.getFullYear(), date.getMonth() + 1);
+      } else {
+        //查询一天的统计数据
         this.displayTypeMonth = "yyyy年MM月dd日";
-      console.log(date)
+        this.setBarChartData(-1, -1);
+      }
+      //console.log(date);
+    },
+    setData(command){
+      this.msgId = command;
+      var to = new Date();
+      to.setFullYear(2018);
+      to.setMonth(9);
+      to.setDate(30);
+
+      var from = new Date();
+      if(this.msgId == 0)from.setTime(to.getTime() - 1000 * 60 * 60 * 3);
+      else if(this.msgId == 1)from.setTime(to.getTime() - 1000 * 60 * 60 * 12);
+      else if(this.msgId == 2)from.setTime(to.getTime() - 1000 * 60 * 60 * 24);
+      //console.log(this.msgId)
+      getDetailedData(from, to).then(resp => {
+        //console.log(to)
+        //console.log(resp.data);
+        this.list = [];
+        for(var i=0 ; i<resp.data.length ; ++i){
+          this.list.push({
+            time: resp.data[i]['统计时间'],
+            position: resp.data[i]['所属街道'] + '  ' + resp.data[i]['所属社区'],
+            attr: resp.data[i]['问题性质名称'],
+            type: resp.data[i]['问题类型'],
+            department: resp.data[i]['处置部门'],
+            status: resp.data[i]['处置状态']
+          })
+        }
+      })
+    },
+    setMapData(year, month){
+      getMapData(year, month).then(resp => {
+        //console.log(resp.data)
+        var tmp = JSON.parse(JSON.stringify(ChartData.pingShanMapData));
+        for(var i = 0 ; i<tmp.data.length ; ++i)
+          tmp.data[i].value[2] = 0;
+        for(var item of resp.data){
+          for(var i = 0 ; i<tmp.data.length ; ++i){
+            if(tmp.data[i].name == item.name){
+              tmp.data[i].value[2] = item.value;
+            }
+          }
+        }
+        if(JSON.stringify(this.pingShanMapData) !== JSON.stringify(tmp)){
+          //console.log("sucess")
+          this.pingShanMapData = tmp;
+        }
+        //console.log(this.pingShanMapData)
+      })
+    },
+    monthChange3(date){
+      //if (date.getDate() == 1 && date.getHours() == 0 && date.getMinutes() == 0 && date.getSeconds() == 0) {
+      if (date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds() == 1) {
+        //查询一个月的统计数据
+        this.displayTypeMonth3 = "yyyy年MM月";
+        this.setMapData(date.getFullYear(), date.getMonth() + 1);
+      } else {
+        //查询一天的统计数据
+        this.displayTypeMonth3 = "yyyy年MM月dd日";
+        this.setMapData(-1, -1);
+      }
+      //console.log(date);
     }
+  },
+  mounted() {
+    // if(JSON.stringify({a:"a", b:"b"}) != JSON.stringify({b:"b", a:"a"})){
+    //   console.log("不相等！")
+    // }
+    this.interval = setInterval( () => {
+      this.setAbnormalData();//实时更新异常数据
+      this.monthChange(this.Month);//实时更新BarChart
+      this.dateChange1(this.date1);//实时更新PieChart
+
+      //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
+      if(this.dateType == "所有时间范围"){//实时更新SunburstChart
+        this.setSunburstChartData(1, 1, 1);
+      }else if(this.dateType == "按月份选择日期"){
+        this.dateChange2(this.Month2);
+      }else{
+        this.dateChange3(this.quarter);
+      }
+
+      this.setData(this.msgId);//实时更新最近发生事件列表
+
+      this.monthChange3(this.Month3);//实时更新地图数据
+
+      //console.log("定时器正在运行！！")
+    }, 1000)
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -239,9 +830,21 @@ export default {
   }
 }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   .chart-wrapper {
     padding: 8px;
   }
+}
+</style>
+
+<style>
+.el-dropdown {
+  vertical-align: top;
+}
+.el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
 }
 </style>

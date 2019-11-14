@@ -1,0 +1,4 @@
+ALT + SHIFT 列选
+CTRL + / 快速注释
+Ctrl + D 选择同名代码
+Crtl + Shift + L 选择所有同名代码

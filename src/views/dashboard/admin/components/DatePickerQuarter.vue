@@ -1,11 +1,7 @@
 <template>
-<el-form>
-<el-form-item label="日期">
-<mark
-  style="position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,0);z-index:999;"
-  v-show="showSeason"
-  @click.stop="showSeason=false"
-></mark>
+<!-- <el-form>
+<el-form-item label="日期"> -->
+<span>
 <el-input placeholder="请选择季度" v-model="showValue" style="width:138px;" @focus="showSeason=true">
   <i slot="prefix" class="el-input__icon el-icon-date"></i>
 </el-input>
@@ -58,9 +54,11 @@
     >第四季度</el-button>
   </div>
 </el-card>
-</el-form-item>
-</el-form>
+</span>
+<!-- </el-form-item>
+</el-form> -->
 </template>
+
 <script>
 /**
  * @file:  View 组件 季节选择控件
@@ -84,14 +82,19 @@ export default {
     defaultValue: {
       default: '',
       type: String
+    },
+    quarter: {
+      type: Date,
+      required: true
     }
   },
   data() {
     return {
-      showSeason: true,
+      showSeason: false,
       season: '',
       year: new Date().getFullYear(),
-      showValue: ''
+      showValue: '',
+      //quarter: new Date()
     }
   },
   created() {
@@ -124,6 +127,10 @@ export default {
       this.year = this.year * 1 + 1
     },
     selectSeason(i) {
+      this.quarter.setFullYear(this.year);
+      this.quarter.setMonth(i);//这里的月份其实是季度！！！
+      this.$emit('dateChange', this.quarter);
+      //console.log(this.quarter)
       let that = this
       that.season = i + 1
       let arr = that.valueArr[i].split('-')

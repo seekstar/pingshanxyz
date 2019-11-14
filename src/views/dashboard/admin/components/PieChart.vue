@@ -20,7 +20,7 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '500px'
     },
     chartData: {
       type: Object,
@@ -36,7 +36,7 @@ export default {
     chartData: {
       deep: true,
       handler(val) {
-        this.setOptions(val)
+        this.chart.setOption({series:[{data:val.properties}]})
       }
     }
   },
@@ -58,25 +58,46 @@ export default {
       this.setOptions(this.chartData)
     },
 
-    setOptions({ properties } = {}) {
+    setOptions(data) {
       this.chart.setOption({
         title: {
-            text: '今日民生'
+            text: data.title
         },
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
+          formatter: '{b}: {c} ({d}%)'
+        },
+        legend: {
+          //data: data.properties.name
+          show: true,
+          type: 'scroll',
+          orient: 'vertical',
+          right: 0,
+		      top: 20,
+		      bottom: 20,
+          data: data.properties.name
         },
         series: [
           {
-            name: '问题性质数目',
+            //name: '问题性质数目',
             type: 'pie',
-            roseType: 'radius',
-            radius: [15, 95],
+            //roseType: 'radius',
+            //radius: [15, 95],
             center: ['50%', '50%'],
-            data: properties,
+            data: data.properties,
             animationEasing: 'cubicInOut',
-            animationDuration: 2600
+            animationDuration: 2600,
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true,
+                  formatter: '{b}: ({d}%)'
+                },
+                labelLine: {
+                  show: true
+                }
+              }
+            }
           }
         ]
       })

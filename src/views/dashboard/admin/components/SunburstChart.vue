@@ -20,7 +20,7 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '500px'
     },
     chartData: {
       type: Object,
@@ -58,17 +58,20 @@ export default {
       this.setOptions(this.chartData)
     },
 
-    setOptions({ tree } = {}) {
+    setOptions(data) {
       this.chart.setOption({
         title: {
-            text: '事件结办分析'
+            text: data.title
         },
         /*legend: {
           data: ['处置中', '超期结办', '按期结办']
         },*/
+        tooltip: {
+            trigger: 'item'
+        },
         series: {
             type: 'sunburst',
-            data: tree,
+            data: data.tree,
             itemStyle: {
                 emphasis: {
                     color: 'red'
@@ -79,7 +82,26 @@ export default {
                 downplay: {
                     color: '#ccc'
                 }
-            }
+            },
+            levels: [
+              {
+                emphasis: {
+                  itemStyle: {
+                    color: 'blue'
+                  },
+                  label: {
+                    name: 'return',
+                    formatter: 'return'
+                  }
+                }
+              },{
+
+              },{
+                label: {
+                  //position: 'outside'
+                }
+              }
+            ],
         }
       })
     }

@@ -1,14 +1,14 @@
 <template>
   <el-card style="margin-bottom:20px;">
     <div slot="header" class="clearfix">
-      <span>About me</span>
+      <span>关于我</span>
     </div>
 
     <div class="user-profile">
       <div class="box-center">
         <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
-          <div>Hello</div>
-          {{ user.role }}
+          <div>欢迎!</div>
+          {{ user.name }}
         </pan-thumb>
       </div>
       <div class="box-center">
@@ -19,32 +19,33 @@
 
     <div class="user-bio">
       <div class="user-education user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>Education</span></div>
+        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>领导寄语</span></div>
         <div class="user-bio-section-body">
           <div class="text-muted">
-            JS in Computer Science from the University of Technology
+            为人民服务!<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;——毛泽东
           </div>
         </div>
       </div>
 
       <div class="user-skills user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>Skills</span></div>
+        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>今日运势</span></div>
         <div class="user-bio-section-body">
           <div class="progress-item">
-            <span>Vue</span>
-            <el-progress :percentage="70" />
+            <span>宜奉献</span>
+            <el-progress :percentage="randomNum(70, 100)" />
           </div>
           <div class="progress-item">
-            <span>JavaScript</span>
-            <el-progress :percentage="18" />
+            <span>宜放假</span>
+            <el-progress :percentage="randomNum(0, 50)" />
           </div>
           <div class="progress-item">
-            <span>Css</span>
-            <el-progress :percentage="12" />
+            <span>宜偷懒</span>
+            <el-progress :percentage="randomNum(0, 30)" />
           </div>
           <div class="progress-item">
-            <span>ESLint</span>
-            <el-progress :percentage="100" status="success" />
+            <span>宜工作</span>
+            <el-progress :percentage="randomNum(80, 100)" />
+            <!-- <el-progress :percentage="randomNum(80, 100)" status="success" /> -->
           </div>
         </div>
       </div>
@@ -68,6 +69,21 @@ export default {
           roles: ''
         }
       }
+    }
+  },
+  methods:{
+    randomNum(minNum,maxNum){ 
+        switch(arguments.length){ 
+            case 1: 
+                return parseInt(Math.random()*minNum+1,10); 
+            break; 
+            case 2: 
+                return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+            break; 
+                default: 
+                    return 0; 
+                break; 
+        } 
     }
   }
 }

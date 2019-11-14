@@ -2,65 +2,57 @@
   <div class="user-activity">
     <div class="post">
       <div class="user-block">
-        <img class="img-circle" :src="'https://wpimg.wallstcn.com/57ed425a-c71e-4201-9428-68760c0537c4.jpg'+avatarPrefix">
-        <span class="username text-muted">Iron Man</span>
-        <span class="description">Shared publicly - 7:30 PM today</span>
+        <img class="img-circle" :src="'https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/pic/item/4610b912c8fcc3ce98789c329d45d688d43f2072.jpg'">
+        <span class="username text-muted">坪山区人民政府</span>
+        <span class="description">坪山区文化广电旅游体育局 - 2019年11月14日</span>
       </div>
       <p>
-        Lorem ipsum represents a long-held tradition for designers,
-        typographers and the like. Some people hate it and argue for
-        its demise, but others ignore the hate as they create awesome
-        tools to help create filler text for everyone from bacon lovers
-        to Charlie Sheen fans.
+        2019年11月13日，坪山区召开创建全国文明城市暨保护未成年人工作推进会，会议通报了近期专项整治工作情况，区公安分局等9个单位结合自身职责和任务分工，围绕文明城市创建和未成年人保护工作进行了汇报发言。会议肯定了各单位、各街道在前一阶段文明城市创建工作中付出的努力和取得的成绩。会议强调，各单位、各街道要齐抓共管，形成全社会共同保护未成年人的良好氛围。对于下一阶段文明城市创建和未成年人保护工作，会议要求，各单位要提高认识，高度重视，正视问题，推动整改，勇担使命，争当文明城市创建标兵，为未成年人健康成长营造良好的环境，展示“打造城市文明典范、建设现代文明之城”的坪山担当。（信息员：陈凡）
       </p>
       <ul class="list-inline">
         <li>
           <span class="link-black text-sm">
             <i class="el-icon-share" />
-            Share
+            分享
           </span>
         </li>
         <li>
           <span class="link-black text-sm">
-            <svg-icon icon-class="like" />
-            Like
+            <svg-icon icon-class="thumbsup" />
+            点赞
           </span>
         </li>
       </ul>
     </div>
     <div class="post">
       <div class="user-block">
-        <img class="img-circle" :src="'https://wpimg.wallstcn.com/9e2a5d0a-bd5b-457f-ac8e-86554616c87b.jpg'+avatarPrefix">
-        <span class="username text-muted">Captain American</span>
-        <span class="description">Sent you a message - yesterday</span>
+        <img class="img-circle" :src="'https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/pic/item/4610b912c8fcc3ce98789c329d45d688d43f2072.jpg'">
+        <span class="username text-muted">坪山区人民政府</span>
+        <span class="description">深圳侨报 - 2019年11月13日</span>
       </div>
       <p>
-        Lorem ipsum represents a long-held tradition for designers,
-        typographers and the like. Some people hate it and argue for
-        its demise, but others ignore the hate as they create awesome
-        tools to help create filler text for everyone from bacon lovers
-        to Charlie Sheen fans.
+        2019年11月12日，“示范深圳 信用先行”深圳社会信用宣传月之坪山区“信用+执法监管”平台推广仪式在创新广场东部之芯举行。区委政法委联合36个区职能部门签署安全生产、纳税信用A级纳税人以及失信被执行人等重点领域多个联合奖惩备忘录，依托“坪山信用网”平台，共同推进以信用为核心的执法监管机制，实施差别化监管和联合奖惩措施，以信用体系建设促进企业自律与良性发展。区委副书记、政法委书记李映中出席仪式并致辞，市发改委、市信用中心相关领导出席活动。
       </p>
       <ul class="list-inline">
         <li>
           <span class="link-black text-sm">
             <i class="el-icon-share" />
-            Share
+            分享
           </span>
         </li>
         <li>
           <span class="link-black text-sm">
-            <svg-icon icon-class="like" />
-            Like
+            <svg-icon icon-class="thumbsup" />
+            点赞
           </span>
         </li>
       </ul>
     </div>
     <div class="post">
       <div class="user-block">
-        <img class="img-circle" :src="'https://wpimg.wallstcn.com/fb57f689-e1ab-443c-af12-8d4066e202e2.jpg'+avatarPrefix">
-        <span class="username">Spider Man</span>
-        <span class="description">Posted 4 photos - 2 days ago</span>
+        <img class="img-circle" :src="'https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/pic/item/4610b912c8fcc3ce98789c329d45d688d43f2072.jpg'">
+        <span class="username">坪山区人民政府</span>
+        <span class="description">近日新闻概览</span>
       </div>
       <div class="user-images">
         <el-carousel :interval="6000" type="card" height="220px">
@@ -70,10 +62,10 @@
         </el-carousel>
       </div>
       <ul class="list-inline">
-        <li><span class="link-black text-sm"><i class="el-icon-share" /> Share</span></li>
+        <li><span class="link-black text-sm"><i class="el-icon-share" /> 分享</span></li>
         <li>
           <span class="link-black text-sm">
-            <svg-icon icon-class="like" /> Like</span>
+            <svg-icon icon-class="thumbsup" /> 点赞</span>
         </li>
       </ul>
     </div>
@@ -88,10 +80,10 @@ export default {
   data() {
     return {
       carouselImages: [
-        'https://wpimg.wallstcn.com/9679ffb0-9e0b-4451-9916-e21992218054.jpg',
-        'https://wpimg.wallstcn.com/bcce3734-0837-4b9f-9261-351ef384f75a.jpg',
-        'https://wpimg.wallstcn.com/d1d7b033-d75e-4cd6-ae39-fcd5f1c0a7c5.jpg',
-        'https://wpimg.wallstcn.com/50530061-851b-4ca5-9dc5-2fead928a939.jpg'
+        'http://www.szpsq.gov.cn/xxgk/jt/tpxw/201811/W020181210434812533882.jpg',
+        'http://www.szpsq.gov.cn/xxgk/jt/tpxw/201911/W020191114383712494675.jpg',
+        'http://www.szpsq.gov.cn/xxgk/jt/tpxw/201911/W020191113618986704819.jpg',
+        'http://www.szpsq.gov.cn/xxgk/jt/tpxw/201911/W020191111384477167083.jpg'
       ],
       avatarPrefix,
       carouselPrefix
