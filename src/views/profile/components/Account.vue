@@ -9,6 +9,9 @@
     <el-form-item label="职能">
       <el-input v-model="form.roles[0]"></el-input>
     </el-form-item>
+    <el-form-item label="手机">
+      <el-input v-model="form.phone"></el-input>
+    </el-form-item>
     <el-form-item label="所属街道">
       <el-select v-model="form.street" placeholder="请选择活动区域">
         <el-option label="碧岭街道" value="碧岭街道"></el-option>
@@ -212,6 +215,7 @@ export default {
         avatar: "",
         name: "",
         roles: "",
+        phone: "",
         street: "",
         community: "",
         department: "",
@@ -238,6 +242,24 @@ export default {
       };
     },
     onSubmit() {
+     if(!(/^1[3456789]\d{9}$/.test(this.form.phone))){
+        Message({
+          message: "电话号码格式填写错误！",
+          type: "error",
+          duration: 5 * 1000
+        });
+        return;
+      }
+
+      if(allCommunity.find(item => item.value === this.form.community) == undefined){
+        Message({
+          message: "所属社区填写错误！没有这个社区！",
+          type: "error",
+          duration: 5 * 1000
+        });
+        return;
+      }
+
       if(allCommunity.find(item => item.value === this.form.community) == undefined){
         Message({
           message: "所属社区填写错误！没有这个社区！",

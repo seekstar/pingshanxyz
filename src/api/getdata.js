@@ -115,3 +115,10 @@ export function getMapData(year, month){
         })
     }
 }
+
+export function getDataVersion(){
+    return request({
+        url: '/data/version',
+        method: 'get'
+    })
+}

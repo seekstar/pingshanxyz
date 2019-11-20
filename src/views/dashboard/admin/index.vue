@@ -26,7 +26,7 @@
           ></el-date-picker>
         </el-row>
         <el-row style="background:#fff;padding:0px 48px 0px;margin-bottom:32px;">
-          <bar-chart :chart-data="BarChartData" />
+          <bar-chart :chart-data="BarChartData"/>
         </el-row>
       </el-col>
     </el-row>
@@ -157,7 +157,8 @@ import {
   getSunburstChartData,
   getAbnormalData,
   getDetailedData,
-  getMapData
+  getMapData,
+  getDataVersion
 } from "@/api/getdata";
 
 function getNowDate() {
@@ -192,139 +193,140 @@ const ChartData = {
       "马峦街道",
       "石井街道",
       "坪山街道",
-      "坑梓街道"
+      "坑梓街道",
+      "-"
     ],
     type: [
-      {
-        name: "安全隐患",
-        data: [0, 0, 0, 0, 1, 0]
-      },
-      {
-        name: "文体旅游",
-        data: [0, 0, 0, 0, 1, 0]
-      },
-      {
-        name: "教育卫生",
-        data: [0, 1, 0, 0, 2, 0]
-      },
-      {
-        name: "组织人事",
-        data: [0, 0, 0, 0, 0, 0]
-      },
-      {
-        name: "党建群团",
-        data: [0, 0, 0, 0, 0, 0]
-      },
-      {
-        name: "党纪政纪",
-        data: [0, 0, 0, 0, 0, 0]
-      },
-      {
-        name: "民政服务",
-        data: [0, 0, 0, 0, 0, 0]
-      },
-      {
-        name: "统一战线",
-        data: [0, 1, 0, 0, 0, 0]
-      },
-      {
-        name: "社区管理",
-        data: [0, 2, 0, 0, 0, 0]
-      },
-      {
-        name: "治安维稳",
-        data: [0, 0, 0, 0, 0, 0]
-      },
-      {
-        name: "环保水务",
-        data: [4, 15, 4, 1, 9, 3]
-      },
-      {
-        name: "规土城建",
-        data: [0, 1, 0, 0, 1, 0]
-      },
-      {
-        name: "市容环卫",
-        data: [1, 4, 2, 0, 13, 8]
-      },
-      {
-        name: "市政设施",
-        data: [1, 7, 1, 0, 5, 3]
-      },
-      {
-        name: "专业事件采集",
-        data: [0, 0, 0, 0, 0, 0]
-      },
-      {
-        name: "交通运输",
-        data: [0, 12, 0, 0, 0, 1]
-      },
-      {
-        name: "劳动社保",
-        data: [0, 0, 0, 2, 1, 0]
-      },
-      {
-        name: "食药市监",
-        data: [1, 1, 0, 0, 0, 0]
-      }
+      // {
+      //   name: "安全隐患",
+      //   data: [0, 0, 0, 0, 1, 0]
+      // },
+      // {
+      //   name: "文体旅游",
+      //   data: [0, 0, 0, 0, 1, 0]
+      // },
+      // {
+      //   name: "教育卫生",
+      //   data: [0, 1, 0, 0, 2, 0]
+      // },
+      // {
+      //   name: "组织人事",
+      //   data: [0, 0, 0, 0, 0, 0]
+      // },
+      // {
+      //   name: "党建群团",
+      //   data: [0, 0, 0, 0, 0, 0]
+      // },
+      // {
+      //   name: "党纪政纪",
+      //   data: [0, 0, 0, 0, 0, 0]
+      // },
+      // {
+      //   name: "民政服务",
+      //   data: [0, 0, 0, 0, 0, 0]
+      // },
+      // {
+      //   name: "统一战线",
+      //   data: [0, 1, 0, 0, 0, 0]
+      // },
+      // {
+      //   name: "社区管理",
+      //   data: [0, 2, 0, 0, 0, 0]
+      // },
+      // {
+      //   name: "治安维稳",
+      //   data: [0, 0, 0, 0, 0, 0]
+      // },
+      // {
+      //   name: "环保水务",
+      //   data: [4, 15, 4, 1, 9, 3]
+      // },
+      // {
+      //   name: "规土城建",
+      //   data: [0, 1, 0, 0, 1, 0]
+      // },
+      // {
+      //   name: "市容环卫",
+      //   data: [1, 4, 2, 0, 13, 8]
+      // },
+      // {
+      //   name: "市政设施",
+      //   data: [1, 7, 1, 0, 5, 3]
+      // },
+      // {
+      //   name: "专业事件采集",
+      //   data: [0, 0, 0, 0, 0, 0]
+      // },
+      // {
+      //   name: "交通运输",
+      //   data: [0, 12, 0, 0, 0, 1]
+      // },
+      // {
+      //   name: "劳动社保",
+      //   data: [0, 0, 0, 2, 1, 0]
+      // },
+      // {
+      //   name: "食药市监",
+      //   data: [1, 1, 0, 0, 0, 0]
+      // }
     ]
   },
   properties: {
     title: "民生诉求分析",
     //types: ['求决', '投诉', '咨询', "建议", '感谢', '其他'],
     properties: [
-      {
-        name: "求决",
-        value: 30
-      },
-      {
-        name: "投诉",
-        value: 6328
-      },
-      {
-        name: "咨询",
-        value: 308
-      },
-      {
-        name: "建议",
-        value: 118
-      },
-      {
-        name: "感谢",
-        value: 10
-      },
-      {
-        name: "其他",
-        value: 1
-      }
+      // {
+      //   name: "求决",
+      //   value: 30
+      // },
+      // {
+      //   name: "投诉",
+      //   value: 6328
+      // },
+      // {
+      //   name: "咨询",
+      //   value: 308
+      // },
+      // {
+      //   name: "建议",
+      //   value: 118
+      // },
+      // {
+      //   name: "感谢",
+      //   value: 10
+      // },
+      // {
+      //   name: "其他",
+      //   value: 1
+      // }
     ]
   },
   pingShanMapData: {
     zoom: 12,
     data: [
-      {name: '马峦社区', value: [114.3382030000,22.6445380000,279]},
-      {name: '金龟社区', value: [114.4064610000,22.6637440000,279]},
-      {name: '汤坑社区', value: [114.3310790000,22.6788050000,100]},
-      {name: '江岭社区', value: [114.3625960000,22.6920200000,120]},
-      {name: '坪环社区', value: [114.3547400000,22.6880960000,161]},
-      {name: '坪山社区', value: [114.3572650000,22.6962590000,134]},
-      {name: '沙坣社区', value: [114.3774770000,22.6901530000,134]},
-      {name: '六联社区', value: [114.3435272387,22.6896070615,134]},
-      {name: '田头社区', value: [114.4108370000,22.6971970000,134]},
-      {name: '碧岭社区', value: [114.2956630000,22.6734200000,134]},
-      {name: '沙湖社区', value: [114.3265520000,22.6790900000,134]},
-      {name: '田心社区', value: [114.4219430000,22.7003510000,134]},
-      {name: '六和社区', value: [114.3499140000,22.7079190000,134]},
-      {name: '竹坑社区', value: [114.3950740000,22.7157730000,134]},
-      {name: '老坑社区', value: [114.3693120000,22.7348660000,134]},
-      {name: '坑梓社区', value: [114.3900130000,22.7530310000,134]},
-      {name: '和平社区', value: [114.3504321337,22.6947184506,134]},
-      {name: '石井社区', value: [114.3909780000,22.6976250000,134]},
-      {name: '南布社区', value: [114.3756070000,22.7053400000,134]},
-      {name: '金沙社区', value: [114.4040810000,22.7586770000,134]},
-      {name: '龙田社区', value: [114.3728410000,22.7533460000,134]},
-      {name: '沙田社区', value: [114.4044440000,22.7617640000,134]},
-      {name: '秀新社区', value: [114.3812230000,22.7468730000,134]}
+      {name: '马峦社区', value: [114.3382030000,22.6445380000,0]},
+      {name: '金龟社区', value: [114.4064610000,22.6637440000,0]},
+      {name: '汤坑社区', value: [114.3310790000,22.6788050000,0]},
+      {name: '江岭社区', value: [114.3625960000,22.6920200000,0]},
+      {name: '坪环社区', value: [114.3547400000,22.6880960000,0]},
+      {name: '坪山社区', value: [114.3572650000,22.6962590000,0]},
+      {name: '沙坣社区', value: [114.3774770000,22.6901530000,0]},
+      {name: '六联社区', value: [114.3435272387,22.6896070615,0]},
+      {name: '田头社区', value: [114.4108370000,22.6971970000,0]},
+      {name: '碧岭社区', value: [114.2956630000,22.6734200000,0]},
+      {name: '沙湖社区', value: [114.3265520000,22.6790900000,0]},
+      {name: '田心社区', value: [114.4219430000,22.7003510000,0]},
+      {name: '六和社区', value: [114.3499140000,22.7079190000,0]},
+      {name: '竹坑社区', value: [114.3950740000,22.7157730000,0]},
+      {name: '老坑社区', value: [114.3693120000,22.7348660000,0]},
+      {name: '坑梓社区', value: [114.3900130000,22.7530310000,0]},
+      {name: '和平社区', value: [114.3504321337,22.6947184506,0]},
+      {name: '石井社区', value: [114.3909780000,22.6976250000,0]},
+      {name: '南布社区', value: [114.3756070000,22.7053400000,0]},
+      {name: '金沙社区', value: [114.4040810000,22.7586770000,0]},
+      {name: '龙田社区', value: [114.3728410000,22.7533460000,0]},
+      {name: '沙田社区', value: [114.4044440000,22.7617640000,0]},
+      {name: '秀新社区', value: [114.3812230000,22.7468730000,0]}
     ],
     boundary: [
       [114.452581, 22.697309],
@@ -411,49 +413,49 @@ const ChartData = {
   status_type: {
     title: "事件结办分析",
     tree: [
-      {
-        name: "处置中",
-        children: [
-          {
-            value: 3,
-            name: "市容环卫"
-          },
-          {
-            value: 5,
-            name: "环保水务"
-          }
-        ]
-      },
-      {
-        name: "超期结办",
-        children: [
-          {
-            name: "市容环卫",
-            value: 4
-          },
-          {
-            name: "环保水务",
-            value: 2
-          },
-          {
-            name: "fuck",
-            value: 4
-          }
-        ]
-      },
-      {
-        name: "按期结办",
-        children: [
-          {
-            name: "市容环卫",
-            value: 2
-          },
-          {
-            name: "环保水务",
-            value: 3
-          }
-        ]
-      }
+      // {
+      //   name: "处置中",
+      //   children: [
+      //     {
+      //       value: 3,
+      //       name: "市容环卫"
+      //     },
+      //     {
+      //       value: 5,
+      //       name: "环保水务"
+      //     }
+      //   ]
+      // },
+      // {
+      //   name: "超期结办",
+      //   children: [
+      //     {
+      //       name: "市容环卫",
+      //       value: 4
+      //     },
+      //     {
+      //       name: "环保水务",
+      //       value: 2
+      //     },
+      //     {
+      //       name: "fuck",
+      //       value: 4
+      //     }
+      //   ]
+      // },
+      // {
+      //   name: "按期结办",
+      //   children: [
+      //     {
+      //       name: "市容环卫",
+      //       value: 2
+      //     },
+      //     {
+      //       name: "环保水务",
+      //       value: 3
+      //     }
+      //   ]
+      // }
     ]
   },
 
@@ -496,8 +498,8 @@ export default {
   data() {
     return {
       allErrorLog: [],
-      PieChartData: ChartData.properties,
       BarChartData: ChartData.types_street,
+      PieChartData: ChartData.properties,
       SunburstChartData: ChartData.status_type,
       lineChartData: ChartData.newVisitis,
       lineChartDataTable: [
@@ -518,6 +520,7 @@ export default {
       dateType: "所有时间范围",
       show2: false,
       show3: false,
+      dataVersion: null,
       pickerOptionsMonth: {
         shortcuts: [
           {
@@ -780,28 +783,54 @@ export default {
       //console.log(date);
     }
   },
-  mounted() {
-    // if(JSON.stringify({a:"a", b:"b"}) != JSON.stringify({b:"b", a:"a"})){
-    //   console.log("不相等！")
-    // }
-    this.interval = setInterval( () => {
-      this.setAbnormalData();//实时更新异常数据
-      this.monthChange(this.Month);//实时更新BarChart
-      this.dateChange1(this.date1);//实时更新PieChart
+  beforeCreate() {
+    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    getDataVersion().then(resp => {
+      if(this.version != resp.data){
+        //console.log("!!!!!!!!!!!!!!")
+        this.version = resp.data;
+        this.setAbnormalData();//实时更新异常数据
+        this.monthChange(this.Month);//实时更新BarChart
+        this.dateChange1(this.date1);//实时更新PieChart
 
-      //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
-      if(this.dateType == "所有时间范围"){//实时更新SunburstChart
-        this.setSunburstChartData(1, 1, 1);
-      }else if(this.dateType == "按月份选择日期"){
-        this.dateChange2(this.Month2);
-      }else{
-        this.dateChange3(this.quarter);
+        //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
+        if(this.dateType == "所有时间范围"){//实时更新SunburstChart
+          this.setSunburstChartData(1, 1, 1);
+        }else if(this.dateType == "按月份选择日期"){
+          this.dateChange2(this.Month2);
+        }else{
+          this.dateChange3(this.quarter);
+        }
+
+        this.setData(this.msgId);//实时更新最近发生事件列表
+
+        this.monthChange3(this.Month3);//实时更新地图数据
       }
+    })
 
-      this.setData(this.msgId);//实时更新最近发生事件列表
+    this.interval = setInterval( () => {
+      getDataVersion().then(resp => {
+        //console.log(resp.data)
+        if(this.version != resp.data){
+          this.version = resp.data;
+          this.setAbnormalData();//实时更新异常数据
+          this.monthChange(this.Month);//实时更新BarChart
+          this.dateChange1(this.date1);//实时更新PieChart
 
-      this.monthChange3(this.Month3);//实时更新地图数据
+          //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
+          if(this.dateType == "所有时间范围"){//实时更新SunburstChart
+            this.setSunburstChartData(1, 1, 1);
+          }else if(this.dateType == "按月份选择日期"){
+            this.dateChange2(this.Month2);
+          }else{
+            this.dateChange3(this.quarter);
+          }
 
+          this.setData(this.msgId);//实时更新最近发生事件列表
+
+          this.monthChange3(this.Month3);//实时更新地图数据
+        }
+      })
       //console.log("定时器正在运行！！")
     }, 1000)
   },
