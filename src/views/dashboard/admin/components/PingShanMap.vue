@@ -8,15 +8,14 @@ require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 require('echarts/extension/bmap/bmap');  ///   如果不引入 那么会 报错：api.coord is not a function"
 
+var DEBUG = false;
+
 function GetCenter(bdry) {
-    //console.log("in center");
     var sum = [0, 0];
     for (var i in bdry) {
         sum[0] += bdry[i][0];
         sum[1] += bdry[i][1];
     }
-    //console.log("sum:");
-    //console.log(sum);
     sum[0] /= bdry.length;
     sum[1] /= bdry.length;
     return sum;
@@ -144,9 +143,11 @@ export default {
                     symbolSize: (val) => {
                       val = val[2];
                       if (val == 0) return 0;
-                      var today = new Date();
-                      console.log(today.toLocaleTimeString());
-                      console.log(data.data)  //这句不能删，会出bug
+                      if (DEBUG) {
+                        var today = new Date();
+                        console.log(today.toLocaleTimeString());
+                        console.log(data.data)  //这句不能删，会出bug
+                      }
                       var mx = 0;
                       for (var v of data.data) {
                         //v = v.value
@@ -166,8 +167,11 @@ export default {
                         }
                       }
                       //console.log("mn = " + mn + ", val = " + val + ", res = " + res);
-                      console.log(res);
-                      return res;
+                      if (DEBUG) {
+                        console.log(res);
+                      }
+                      //return res;
+                      return 10;
                     },
                     label: {
                         normal: {
@@ -202,9 +206,6 @@ export default {
                             for (var i = 0; i < data.boundary.length; i++) {
                                 points.push(api.coord(data.boundary[i]));
                             }
-
-                            //console.log("points:");
-                            //console.log(points);
 
                             var color = api.visual('color');
 
