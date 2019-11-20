@@ -25,7 +25,7 @@ function gen_series(data) {
   return series;
 }
 
-const animationDuration = 6000
+const animationDuration = 2000
 
 export default {
   mixins: [resize],
@@ -109,7 +109,7 @@ export default {
           },
           axisLabel: {
             textStyle: {
-              fontWeight: 'bold',
+              //fontWeight: 'bold',
               fontSize: 20
             }
           }

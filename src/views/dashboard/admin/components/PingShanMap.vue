@@ -144,17 +144,29 @@ export default {
                     symbolSize: (val) => {
                       val = val[2];
                       if (val == 0) return 0;
-                      var mn = 99999999;
+                      var today = new Date();
+                      console.log(today.toLocaleTimeString());
                       console.log(data.data)  //这句不能删，会出bug
+                      var mx = 0;
                       for (var v of data.data) {
-                        v = v.value
-                        //console.log("v[2] = " + v[2]);
-                        if (v[2] > 0) {
-                          mn = Math.min(mn, v[2]);
+                        //v = v.value
+                        mx = Math.max(mx, v.value[2]);
+                        //console.log(v.value[2]);
+                      }
+                      //var res = Math.sqrt(val / mx) * 20;
+                      var res;
+                      if (mx < 1) {
+                        res = 0;
+                      } else {
+                        var rate = val / mx;
+                        if (rate < 0.5) {
+                          res = 0;
+                        } else {
+                          res = rate * 20;
                         }
                       }
-                      var res = Math.sqrt(val / mn) + 5;
                       //console.log("mn = " + mn + ", val = " + val + ", res = " + res);
+                      console.log(res);
                       return res;
                     },
                     label: {
@@ -174,7 +186,10 @@ export default {
                     },
                     itemStyle: {
                         normal: {
-                            color: 'blue',
+                            //color: '#177cb0',
+                            //color: 'Olive'
+                            //color: 'orange'
+                            color: 'Fuchsia'
                         }
                     }
                 },
