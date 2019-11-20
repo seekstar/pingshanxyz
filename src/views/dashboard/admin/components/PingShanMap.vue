@@ -8,7 +8,9 @@ require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 require('echarts/extension/bmap/bmap');  ///   如果不引入 那么会 报错：api.coord is not a function"
 
-var DEBUG = false;
+var DEBUG = true;
+
+var data = null;
 
 function GetCenter(bdry) {
     var sum = [0, 0];
@@ -53,7 +55,8 @@ export default {
     chartData: {
       deep: true,
       handler(val) {
-        this.chart.setOption({series: [{data: val.data}]})
+        data = val;
+        this.chart.setOption({series: [{data: data.data}]})
       }
     }
   },
@@ -92,10 +95,12 @@ export default {
             document.body.appendChild(scriptNode);
         }).then((BMap)=>{
             this.chart = echarts.init(this.$el, 'macarons')
-            this.setOptions(this.chartData)
+
+            data = this.chartData;
+            this.setOptions()
         })
     },
-    setOptions(data) {
+    setOptions() {
       console.log('refreshing PingShanMap')
       this.chart.setOption({
             backgroundColor: 'transparent',
@@ -150,28 +155,30 @@ export default {
                       }
                       var mx = 0;
                       for (var v of data.data) {
-                        //v = v.value
-                        mx = Math.max(mx, v.value[2]);
+                        if (v.value[2] > mx) {
+                          mx = v.value[2];
+                          if (DEBUG) {
+                            console.log(v.name);
+                          }
+                        }
                         //console.log(v.value[2]);
                       }
-                      //var res = Math.sqrt(val / mx) * 20;
                       var res;
                       if (mx < 1) {
                         res = 0;
                       } else {
                         var rate = val / mx;
-                        if (rate < 0.5) {
+                        if (rate < 0.3) {
                           res = 0;
                         } else {
                           res = rate * 20;
                         }
                       }
-                      //console.log("mn = " + mn + ", val = " + val + ", res = " + res);
                       if (DEBUG) {
-                        console.log(res);
+                        console.log("mx = " + mx + ", val = " + val + ", res = " + res);
                       }
-                      //return res;
-                      return 10;
+                      return res;
+                      //return 10;
                     },
                     label: {
                         normal: {
