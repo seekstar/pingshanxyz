@@ -189,7 +189,8 @@ export default {
                             //color: '#177cb0',
                             //color: 'Olive'
                             //color: 'orange'
-                            color: 'Fuchsia'
+                            //color: 'Fuchsia'
+                            color: '#ff5151'
                         }
                     }
                 },
