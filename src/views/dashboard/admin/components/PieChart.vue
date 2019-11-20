@@ -60,6 +60,11 @@ export default {
 
     setOptions(data) {
       this.chart.setOption({
+        toolbox:{
+          feature:{
+            saveAsImage:{}
+          }
+        },
         title: {
             text: data.title
         },
