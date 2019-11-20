@@ -8,15 +8,16 @@ require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 require('echarts/extension/bmap/bmap');  ///   如果不引入 那么会 报错：api.coord is not a function"
 
+var DEBUG = true;
+
+var data = null;
+
 function GetCenter(bdry) {
-    ////console.log("in center");
     var sum = [0, 0];
     for (var i in bdry) {
         sum[0] += bdry[i][0];
         sum[1] += bdry[i][1];
     }
-    ////console.log("sum:");
-    ////console.log(sum);
     sum[0] /= bdry.length;
     sum[1] /= bdry.length;
     return sum;
@@ -54,7 +55,8 @@ export default {
     chartData: {
       deep: true,
       handler(val) {
-        this.chart.setOption({series: [{data: val.data}]})
+        data = val;
+        this.chart.setOption({series: [{data: data.data}]})
       }
     }
   },
@@ -93,11 +95,13 @@ export default {
             document.body.appendChild(scriptNode);
         }).then((BMap)=>{
             this.chart = echarts.init(this.$el, 'macarons')
-            this.setOptions(this.chartData)
+
+            data = this.chartData;
+            this.setOptions()
         })
     },
-    setOptions(data) {
-      //console.log('refreshing PingShanMap')
+    setOptions() {
+      console.log('refreshing PingShanMap')
       this.chart.setOption({
             backgroundColor: 'transparent',
             title: {
@@ -144,30 +148,37 @@ export default {
                     symbolSize: (val) => {
                       val = val[2];
                       if (val == 0) return 0;
-                      var today = new Date();
-                      //console.log(today.toLocaleTimeString());
-                      //console.log(data.data)  //这句不能删，会出bug
+                      if (DEBUG) {
+                        var today = new Date();
+                        console.log(today.toLocaleTimeString());
+                        console.log(data.data)  //这句不能删，会出bug
+                      }
                       var mx = 0;
                       for (var v of data.data) {
-                        //v = v.value
-                        mx = Math.max(mx, v.value[2]);
-                        ////console.log(v.value[2]);
+                        if (v.value[2] > mx) {
+                          mx = v.value[2];
+                          if (DEBUG) {
+                            console.log(v.name);
+                          }
+                        }
+                        //console.log(v.value[2]);
                       }
-                      //var res = Math.sqrt(val / mx) * 20;
                       var res;
                       if (mx < 1) {
                         res = 0;
                       } else {
                         var rate = val / mx;
-                        if (rate < 0.5) {
+                        if (rate < 0.3) {
                           res = 0;
                         } else {
                           res = rate * 20;
                         }
                       }
-                      ////console.log("mn = " + mn + ", val = " + val + ", res = " + res);
-                      //console.log(res);
+                      if (DEBUG) {
+                        console.log("mx = " + mx + ", val = " + val + ", res = " + res);
+                      }
                       return res;
+                      //return 10;
                     },
                     label: {
                         normal: {
@@ -202,9 +213,6 @@ export default {
                             for (var i = 0; i < data.boundary.length; i++) {
                                 points.push(api.coord(data.boundary[i]));
                             }
-
-                            ////console.log("points:");
-                            ////console.log(points);
 
                             var color = api.visual('color');
 
