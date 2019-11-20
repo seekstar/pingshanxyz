@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  title: '深圳市坪山区民生诉求数据分析系统',
 
   /**
    * @type {boolean} true | false
