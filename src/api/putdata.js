@@ -7,3 +7,10 @@ export function putData(form) {
       data: form
     })
   }
+export function putMyData(data) {
+  return request({
+    url: '/user/data',
+    method: 'put',
+    data
+  })
+}

@@ -6,7 +6,7 @@
     style="background:#fff;padding:48px 48px 0;margin-bottom:32px;"
   >
     <el-form-item label="所属街道">
-      <el-select v-model="form.street" placeholder="请选择活动区域">
+      <el-select v-model="form.street" placeholder="请选择活动区域" style="width: 50%;">
         <el-option label="碧岭街道" value="碧岭街道"></el-option>
         <el-option label="龙田街道" value="龙田街道"></el-option>
         <el-option label="马峦街道" value="马峦街道"></el-option>
@@ -22,6 +22,7 @@
         v-model="form.community"
         :fetch-suggestions="querySearchCommunity"
         placeholder="请输入内容"
+        style="width: 50%;"
       ></el-autocomplete>
     </el-form-item>
 
@@ -31,6 +32,7 @@
         v-model="form.type"
         :fetch-suggestions="querySearchType"
         placeholder="请输入内容"
+        style="width: 50%;"
       ></el-autocomplete>
     </el-form-item>
 
@@ -40,6 +42,7 @@
         v-model="form.big"
         :fetch-suggestions="querySearchBig"
         placeholder="请输入内容"
+        style="width: 50%;"
       ></el-autocomplete>
     </el-form-item>
 
@@ -49,6 +52,7 @@
         v-model="form.small"
         :fetch-suggestions="querySearchSmall"
         placeholder="请输入内容"
+        style="width: 50%;"
       ></el-autocomplete>
     </el-form-item>
 
@@ -58,11 +62,12 @@
         v-model="form.department"
         :fetch-suggestions="querySearchDepartment"
         placeholder="请输入内容"
+        style="width: 50%;"
       ></el-autocomplete>
     </el-form-item>
 
     <el-form-item label="平台渠道">
-      <el-select v-model="form.source" placeholder="请选择">
+      <el-select v-model="form.source" placeholder="请选择" style="width: 50%;">
         <el-option label="政府信箱" value="政府信箱"></el-option>
         <el-option label="美丽深圳" value="美丽深圳"></el-option>
         <el-option label="@坪山" value="@坪山"></el-option>
@@ -74,7 +79,7 @@
     </el-form-item>
 
     <el-form-item label="事件性质">
-      <el-select v-model="form.property" placeholder="请选择">
+      <el-select v-model="form.property" placeholder="请选择" style="width: 50%;">
         <el-option label="求决" value="求决"></el-option>
         <el-option label="投诉" value="投诉"></el-option>
         <el-option label="咨询" value="咨询"></el-option>

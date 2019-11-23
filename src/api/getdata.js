@@ -90,6 +90,12 @@ export function getDetailedData(from, to){
         }
     })
 }
+export function getMyData() {
+    return request({
+        url: '/user/data', // 假地址 自行替换
+        method: 'get'
+    })
+}
 
 export function getAbnormalData(from, to){
     return request({

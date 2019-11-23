@@ -1,21 +1,25 @@
 <template>
-  <el-form ref="form" :model="form" label-width="80px">
-    <el-form-item label="头像">
-      <upload-avatar />
+  <el-form ref="form" :model="form" label-width="80px" style="background:#fff;padding:48px 48px 0;margin-bottom:32px;">
+    <el-form-item label="用户名" style="width: 50%;">
+      <el-input v-model="form.username"></el-input>
     </el-form-item>
-    <el-form-item label="姓名">
-      <el-tag >{{form.name}}</el-tag>
+    <el-form-item label="密码" style="width: 50%;">
+      <el-input v-model="form.password"></el-input>
     </el-form-item>
-    <el-form-item label="职能">
-      <el-tag >{{form.roles}}</el-tag>
+    <el-form-item label="角色" style="width: 50%;">
+    <el-checkbox-group v-model="form.roles">
+    <el-checkbox label="管理员" name="roles"></el-checkbox>
+    <el-checkbox label="登记员" name="roles"></el-checkbox>
+    <el-checkbox label="处理员" name="roles"></el-checkbox>
+  </el-checkbox-group>
     </el-form-item>
-    <el-form-item label="手机">
-      <el-input v-model="form.phone" style="width: 50%;"></el-input>
+    <el-form-item label="手机" style="width: 50%;">
+      <el-input v-model="form.phone"></el-input>
     </el-form-item>
-      <el-form-item label="个人简介">
-      <el-input v-model="form.introduction" style="width: 50%;"></el-input>
+        <el-form-item label="个人简介" style="width: 50%;">
+      <el-input v-model="form.introduction"></el-input>
     </el-form-item>
-    <el-form-item label="所属街道" v-if=show>
+    <el-form-item label="所属街道"  v-if=show>
       <el-select v-model="form.street" placeholder="请选择街道" style="width: 50%;">
         <el-option label="碧岭街道" value="碧岭街道"></el-option>
         <el-option label="龙田街道" value="龙田街道"></el-option>
@@ -25,7 +29,7 @@
         <el-option label="坑梓街道" value="坑梓街道"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="所属社区" v-if=show>
+    <el-form-item label="所属社区"  v-if=show>
       <el-autocomplete
         class="inline-input"
         v-model="form.community"
@@ -36,7 +40,7 @@
       ></el-autocomplete>
     </el-form-item>
 
-    <el-form-item label="所属部门" v-if=show>
+    <el-form-item label="所属部门"  v-if=show>
       <el-autocomplete
         class="inline-input"
         v-model="form.department"
@@ -47,17 +51,17 @@
       ></el-autocomplete>
     </el-form-item>
 
-  
+
 
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">提交修改</el-button>
+      <el-button type="primary" @click="onSubmit">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
 import UploadAvatar from '@/components/UploadAvatar'
-import { getInfo, updateInfo } from "@/api/user"
+import { addUser } from "@/api/user"
 import { MessageBox, Message } from 'element-ui'
 
 const allCommunity = [
@@ -215,9 +219,10 @@ export default {
   data() {
     return {
       form: {
-        avatar: "",
-        name: "",
-        roles: "",
+        avatar: "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80",
+        username: "",
+        password:"",
+        roles: ['处理员'],
         phone: "",
         street: "",
         community: "",
@@ -258,17 +263,8 @@ export default {
         });
         return;
       }
-
-      if(allCommunity.find(item => item.value === this.form.community) == undefined){
-        Message({
-          message: "所属社区填写错误！没有这个社区！",
-          type: "error",
-          duration: 5 * 1000
-        });
-        return;
-      }
-
-      if(allCommunity.find(item => item.value === this.form.community) == undefined){
+      if(this.show){
+        if(allCommunity.find(item => item.value === this.form.community) == undefined){
         Message({
           message: "所属社区填写错误！没有这个社区！",
           type: "error",
@@ -285,10 +281,11 @@ export default {
         });
         return;
       }
-
-      updateInfo(this.form).then(resp => {
+      }
+      
+      addUser(this.form).then(resp => {
         Message({
-          message: '个人信息修改成功！',
+          message: '添加用户成功',
           type: 'success',
           duration: 5 * 1000
         })
@@ -297,12 +294,6 @@ export default {
     handleSelect(){
 
     }
-  },
-  mounted(){
-    getInfo().then(resp => {
-      //console.log(resp.data)
-      this.form = resp.data
-    })
   }
 }
 </script>

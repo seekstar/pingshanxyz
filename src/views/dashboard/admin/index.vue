@@ -808,7 +808,10 @@ export default {
       }
     })
 
-    this.interval = setInterval( () => {
+  
+  },
+  mounted(){
+      this.interval = setInterval( () => {
       getDataVersion().then(resp => {
         //console.log(resp.data)
         if(this.version != resp.data){
@@ -832,7 +835,9 @@ export default {
         }
       })
       //console.log("定时器正在运行！！")
+      //console.log(this.interval)
     }, 1000)
+    
   },
   beforeDestroy() {
     clearInterval(this.interval)

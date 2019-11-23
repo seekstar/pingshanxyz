@@ -7,10 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
+
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -138,13 +135,43 @@ export const asyncRoutes = [
         component: () => import('@/views/pcedit/index'),
         name: 'Pcedit',
         meta: {
-          title: '登记页',
+          title: '登记事件',
           icon: 'edit',
+          roles: ['管理员','登记员']
+        }
+      }
+    ]
+  }, {
+    path: '/resolve',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/resolve/index'),
+        name: 'Resolve',
+        meta: {
+          title: '处置事件',
+          icon: 'documentation',
+          roles: ['管理员','处理员']
+        }
+      }
+    ]
+  }, {
+    path: '/user',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/user/index'),
+        name: 'User',
+        meta: {
+          title: '添加用户',
+          icon: 'user',
           roles: ['管理员']
         }
       }
     ]
-  },
+  }, 
   // {
   //   path: '/permission',
   //   component: Layout,
