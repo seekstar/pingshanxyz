@@ -38,8 +38,6 @@ module.exports = {
       errors: true
     },
     proxy: {
-      // change xxx-api/login => mock/login
-      // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
         target: `https://pingshan.xyz/`,
         changeOrigin: true,
@@ -48,7 +46,6 @@ module.exports = {
         }
       }
     },
-    after: require('./mock/mock-server.js')
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

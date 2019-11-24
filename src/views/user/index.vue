@@ -19,27 +19,6 @@
         <el-form-item label="个人简介" style="width: 50%;">
       <el-input v-model="form.introduction"></el-input>
     </el-form-item>
-    <el-form-item label="所属街道"  v-if=show>
-      <el-select v-model="form.street" placeholder="请选择街道" style="width: 50%;">
-        <el-option label="碧岭街道" value="碧岭街道"></el-option>
-        <el-option label="龙田街道" value="龙田街道"></el-option>
-        <el-option label="马峦街道" value="马峦街道"></el-option>
-        <el-option label="石井街道" value="石井街道"></el-option>
-        <el-option label="坪山街道" value="坪山街道"></el-option>
-        <el-option label="坑梓街道" value="坑梓街道"></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="所属社区"  v-if=show>
-      <el-autocomplete
-        class="inline-input"
-        v-model="form.community"
-        :fetch-suggestions="querySearchCommunity"
-        placeholder="请输入内容"
-        @select="handleSelect"
-        style="width: 50%;"
-      ></el-autocomplete>
-    </el-form-item>
-
     <el-form-item label="所属部门"  v-if=show>
       <el-autocomplete
         class="inline-input"
@@ -63,32 +42,6 @@
 import UploadAvatar from '@/components/UploadAvatar'
 import { addUser } from "@/api/user"
 import { MessageBox, Message } from 'element-ui'
-
-const allCommunity = [
-  { 'value': "马峦社区" },
-  { 'value': "金龟社区" },
-  { 'value': "汤坑社区" },
-  { 'value': "江岭社区" },
-  { 'value': "坪环社区" },
-  { 'value': "坪山社区" },
-  { 'value': "沙坣社区" },
-  { 'value': "六联社区" },
-  { 'value': "田头社区" },
-  { 'value': "碧岭社区" },
-  { 'value': "沙湖社区" },
-  { 'value': "田心社区" },
-  { 'value': "六和社区" },
-  { 'value': "竹坑社区" },
-  { 'value': "老坑社区" },
-  { 'value': "坑梓社区" },
-  { 'value': "和平社区" },
-  { 'value': "石井社区" },
-  { 'value': "南布社区" },
-  { 'value': "金沙社区" },
-  { 'value': "龙田社区" },
-  { 'value': "沙田社区" },
-  { 'value': "秀新社区" }
-]
 
 const allDepartment = [
   { 'value': "交通轨道办" },
@@ -224,8 +177,6 @@ export default {
         password:"",
         roles: ['处理员'],
         phone: "",
-        street: "",
-        community: "",
         department: "",
         introduction: "",
       }
@@ -264,15 +215,7 @@ export default {
         return;
       }
       if(this.show){
-        if(allCommunity.find(item => item.value === this.form.community) == undefined){
-        Message({
-          message: "所属社区填写错误！没有这个社区！",
-          type: "error",
-          duration: 5 * 1000
-        });
-        return;
-      }
-
+    
       if(allDepartment.find(item => item.value === this.form.department) == undefined){
         Message({
           message: "所属部门填写错误！没有这个部门！",

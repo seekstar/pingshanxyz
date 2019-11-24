@@ -69,13 +69,6 @@ import { getMyData,getDataVersion } from '@/api/getdata'
 import { putMyData } from '@/api/putdata'
 export default {
   filters: {
-    statusFilter1(status) {
-      if(status=='按期办结')
-        return 'success'
-      if(status=='超期办结')
-        return 'warning'
-      return 'danger'
-    },
     timeFilter(str) {
       return str.substring(0, 10) + ' ' + str.substring(11, 19)
     }
