@@ -1,16 +1,7 @@
 <template>
-  <div style="background: #fff;width: 100%;padding-top: 15px;margin-bottom:32px;">
+  <div style="background: #fff;width: 100%;padding-bottom: 15px;margin-bottom:32px;">
   <!-- <span class="demonstration">最近事件实时显示：</span> -->
-  <el-dropdown @command="handleCommand" style="padding:0px 16px 0px;margin-bottom:16px;">
-    <el-button type="primary">
-      {{ msg[msgId] }}<i class="el-icon-arrow-down el-icon--right"></i>
-    </el-button>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item command="0">{{ msg[0] }}</el-dropdown-item>
-      <el-dropdown-item command="1">{{ msg[1] }}</el-dropdown-item>
-      <el-dropdown-item command="2">{{ msg[2] }}</el-dropdown-item>
-    </el-dropdown-menu>
-  </el-dropdown>
+  
   <el-table :data="list" :stripe="true" height="600">
     <el-table-column label="统计时间" min-width="150">
       <template slot-scope="scope">
@@ -45,6 +36,14 @@
       </template>
     </el-table-column>
   </el-table>
+  <el-pagination
+    layout="total, prev, pager, next, jumper"
+    :page-size="10"
+    :pager-count="11"
+    @current-change="handleCurrentChange"
+    :total="count"
+    style="text-align:center">
+  </el-pagination>
   </div>
 </template>
 
@@ -70,14 +69,18 @@ export default {
       type: Array,
       required: true
     },
-    msgId: {
+    page: {
       type: Number,
+      required: true
+    },
+    count:{
+      type:Number,
       required: true
     }
   },
   data() {
     return {
-      msg: ['最近三小时', '最近十二小时', '最近一天']
+      msg: ['最近十条','最近一百条', '最近五百条']
     }
   },
   // created() {
@@ -86,38 +89,11 @@ export default {
   //   }, 5000)
   // },
   methods: {
-    handleCommand(command){
-      this.$emit('setData', Number(command));
-    },
-    /*
-    setData(){
-        var to = new Date();
-        to.setFullYear(2018);
-        to.setMonth(9);
-        to.setDate(30);
 
-        var from = new Date();
-        if(this.msgId == 0)from.setTime(to.getTime() - 1000 * 60 * 10);
-        else if(this.msgId == 1)from.setTime(to.getTime() - 1000 * 60 * 60);
-        else if(this.msgId == 2)from.setTime(to.getTime() - 1000 * 60 * 60 * 24);
-        console.log(this.msgId)
-        getDetailedData(from, to).then(resp => {
-          //console.log(to)
-          //console.log(resp.data);
-          this.list = [];
-          for(var i=0 ; i<resp.data.length ; ++i){
-            this.list.push({
-              time: resp.data[i]['统计时间'],
-              position: resp.data[i]['所属街道'] + '  ' + resp.data[i]['所属社区'],
-              attr: resp.data[i]['问题性质名称'],
-              type: resp.data[i]['问题类型'],
-              department: resp.data[i]['处置部门'],
-              status: resp.data[i]['处置状态']
-            })
-          }
-        })
-    }
-    */
+    handleCurrentChange(val) {
+      this.page=val
+      this.$emit('setData', Number(val));
+      }
   }
 }
 </script>

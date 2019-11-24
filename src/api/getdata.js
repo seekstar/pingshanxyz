@@ -80,14 +80,17 @@ export function getSunburstChartData(op, year, date){
     }
 }
 
-export function getDetailedData(from, to){
+export function getDetailedData(page,count){
     return request({
         url: '/data', // 假地址 自行替换
         method: 'get',
-        params: {
-            'from': dateFormat("YYYY-mm-dd HH:MM:SS", from),
-            'to': dateFormat("YYYY-mm-dd HH:MM:SS", to)
-        }
+        params: {page,count}
+    })
+}
+export function getDataCount() {
+    return request({
+        url: '/data/count', // 假地址 自行替换
+        method: 'get'
     })
 }
 export function getMyData() {
@@ -97,7 +100,7 @@ export function getMyData() {
     })
 }
 
-export function getAbnormalData(from, to){
+export function getAbnormalData(){
     return request({
         url: '/data/abnormal',
         method: 'get'

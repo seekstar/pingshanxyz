@@ -29,7 +29,8 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      depth:1
     }
   },
   watch: {
@@ -56,10 +57,16 @@ export default {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
+      this.chart.on('click',val=>{
+        if(val.treePathInfo.length>1) this.depth=val.treePathInfo.length
+        else this.depth--
+        //console.log(val.treePathInfo.length)
+        })
     },
 
     setOptions(data) {
-      this.chart.setOption({
+      if(this.depth==1){
+        this.chart.setOption({
         toolbox:{
           feature:{
             saveAsImage:{}
@@ -109,6 +116,7 @@ export default {
             ],
         }
       })
+      }
     }
   }
 }

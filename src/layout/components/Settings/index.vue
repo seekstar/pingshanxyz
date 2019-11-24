@@ -22,6 +22,14 @@
         <span>政府标志</span>
         <el-switch v-model="sidebarLogo" class="drawer-switch" />
       </div>
+      <div class="drawer-item">
+        <span>模拟测试</span>
+        <el-switch v-model="test" class="drawer-switch" @change="testChange" />
+      </div>
+      <div class="drawer-item">
+        <span>清理测试</span>
+        <el-button  class="drawer-switch" type="danger" icon="el-icon-delete" @click="testClean" size="mini" round />
+      </div>
 
     </div>
   </div>
@@ -29,11 +37,15 @@
 
 <script>
 import ThemePicker from '@/components/ThemePicker'
-
+import {startTest,stopTest,cleanTest,getTest} from '@/api/test'
+import getters from '../../../store/getters'
 export default {
   components: { ThemePicker },
   data() {
-    return {}
+    return {test:false}
+  },
+  created:function(){
+    getTest().then(resp=>{this.test=resp.data})
   },
   computed: {
     fixedHeader: {
@@ -60,6 +72,7 @@ export default {
     },
     sidebarLogo: {
       get() {
+        
         return this.$store.state.settings.sidebarLogo
       },
       set(val) {
@@ -68,17 +81,27 @@ export default {
           value: val
         })
       }
-    }
+  }
   },
+  
   methods: {
     themeChange(val) {
       this.$store.dispatch('settings/changeSetting', {
         key: 'theme',
         value: val
       })
+    },
+    testChange(val){
+      if(val)startTest()
+      else stopTest()
+
+    },
+    testClean(){
+     cleanTest()
     }
   }
 }
+  
 </script>
 
 <style lang="scss" scoped>

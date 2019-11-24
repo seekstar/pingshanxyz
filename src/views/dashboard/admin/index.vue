@@ -85,7 +85,7 @@
         :lg="{span: 12}"
         :xl="{span: 12}"
       >
-        <transaction-table :list="list" :msgId="msgId" @setData="setData"/>
+        <transaction-table :list="list" :page="page" :count="count" @setData="setData"/>
       </el-col>
 
       <el-col
@@ -158,7 +158,8 @@ import {
   getAbnormalData,
   getDetailedData,
   getMapData,
-  getDataVersion
+  getDataVersion,
+  getDataCount
 } from "@/api/getdata";
 
 function getNowDate() {
@@ -184,6 +185,7 @@ function thisDay(){
   return [start, end];
 }
 
+var count=0
 const ChartData = {
   types_street: {
     title: "各街道民生事件情况",
@@ -533,7 +535,7 @@ export default {
         ]
       },
       list: [],
-      msgId: 0,
+      page: 1,
       interval: null
     };
   },
@@ -721,19 +723,12 @@ export default {
       }
       //console.log(date);
     },
-    setData(command){
-      this.msgId = command;
-      var to = new Date();
-      to.setFullYear(2018);
-      to.setMonth(9);
-      to.setDate(30);
-
-      var from = new Date();
-      if(this.msgId == 0)from.setTime(to.getTime() - 1000 * 60 * 60 * 3);
-      else if(this.msgId == 1)from.setTime(to.getTime() - 1000 * 60 * 60 * 12);
-      else if(this.msgId == 2)from.setTime(to.getTime() - 1000 * 60 * 60 * 24);
-      //console.log(this.msgId)
-      getDetailedData(from, to).then(resp => {
+    setData(page){
+      this.page=page
+      getDataCount().then(resp=>{
+        this.count=resp.data
+      })
+      getDetailedData(page,10).then(resp => {
         //console.log(to)
         //console.log(resp.data);
         this.list = [];
@@ -802,7 +797,7 @@ export default {
           this.dateChange3(this.quarter);
         }
 
-        this.setData(this.msgId);//实时更新最近发生事件列表
+        this.setData(this.page);//实时更新最近发生事件列表
 
         this.monthChange3(this.Month3);//实时更新地图数据
       }
@@ -829,7 +824,7 @@ export default {
             this.dateChange3(this.quarter);
           }
 
-          this.setData(this.msgId);//实时更新最近发生事件列表
+          this.setData(this.page);//实时更新最近发生事件列表
 
           this.monthChange3(this.Month3);//实时更新地图数据
         }
