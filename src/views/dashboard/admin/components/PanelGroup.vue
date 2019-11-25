@@ -1,112 +1,67 @@
 <template>
-  <el-row
-    :gutter="40"
-    class="panel-group"
-  >
-    <el-col
-      :xs="8"
-      :sm="8"
-      :lg="4"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData(0)"
-      >
+  <el-row :gutter="40" class="panel-group">
+    <el-col :xs="8" :sm="8" :lg="4" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData(0)">
         <div class="card-panel-description">
           <div class="card-panel-text">
             求决
           </div>
+          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     
-    <el-col
-      :xs="8"
-      :sm="8"
-      :lg="4"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData(0)"
-      >
+    <el-col :xs="8" :sm="8" :lg="4" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData(1)">
         <div class="card-panel-description">
           <div class="card-panel-text">
             投诉
           </div>
+          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
 
-    <el-col
-      :xs="8"
-      :sm="8"
-      :lg="4"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData(0)"
-      >
+    <el-col :xs="8" :sm="8" :lg="4" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData(2)">
         <div class="card-panel-description">
           <div class="card-panel-text">
             咨询
           </div>
+          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
 
-    <el-col
-      :xs="8"
-      :sm="8"
-      :lg="4"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData(0)"
-      >
+    <el-col :xs="8" :sm="8" :lg="4" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData(3)">
         <div class="card-panel-description">
           <div class="card-panel-text">
             建议
           </div>
+          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
 
-    <el-col
-      :xs="8"
-      :sm="8"
-      :lg="4"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData(0)"
-      >
+    <el-col :xs="8" :sm="8" :lg="4" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData(4)">
         <div class="card-panel-description">
           <div class="card-panel-text">
             感谢
           </div>
+          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
 
-    <el-col
-      :xs="8"
-      :sm="8"
-      :lg="4"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData(0)"
-      >
+    <el-col :xs="8" :sm="8" :lg="4" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData(5)">
         <div class="card-panel-description">
           <div class="card-panel-text">
             其他
           </div>
+          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>

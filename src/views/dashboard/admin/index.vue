@@ -655,7 +655,7 @@ export default {
   beforeMount() {
     const day = 24*60*60*1000;
     var now = new Date();
-    now = new Date(now.getTime() - 7 * day);
+    now = new Date(now.getTime() - 8 * day);
     for (var i = 0; i < 7; ++i) {
       now = new Date(now.getTime() + day);
       var formatted_date = now.format('yyyy-mm-dd');
@@ -836,10 +836,11 @@ export default {
     },
     handleSetLineChartData(type) {
       this.lastLineChartType = type;
-      this.lineChartData = {
+      var new_data = {
         xnames: this.lineChartXNames,
         data: this.lineChartDataTable[type]
       };
+      this.lineChartData = new_data;
     },
     dateChange1(date) {
       this.date1 = date
