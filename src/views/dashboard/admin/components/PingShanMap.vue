@@ -9,10 +9,13 @@
 import echarts from "echarts";
 require("echarts/theme/macarons"); // echarts theme
 import resize from "./mixins/resize";
+import { color } from 'echarts/lib/export';
 require("echarts/extension/bmap/bmap"); ///   如果不引入 那么会 报错：api.coord is not a function"
 
-var DEBUG = false;
+import { colors } from "./lib/colors";
 
+
+//var DEBUG = false;
 
 function GetCenter(bdry) {
   var sum = [0, 0];
@@ -27,12 +30,14 @@ function GetCenter(bdry) {
 
 
 
-
 var data = null;
 
 var mx = null;
 var small_data = null;
 var top = null;
+
+var color_env = null;
+//var renderItem = null;
 
 function UpdateData(new_data) {
   data = new_data;
@@ -54,7 +59,39 @@ function UpdateData(new_data) {
       top.push(v);
     }
   }
+
+  color_env = colors[data.choose_env];
+  /*renderItem = (params, api) => {
+    return renderItem_base(params, api, color_env);
+  }*/
 }
+
+function renderItem_base(params, api) {
+  var points = [];
+  for (var i = 0; i < data.boundary.length; i++) {
+    points.push(api.coord(data.boundary[i]));
+  }
+
+  //var color = api.visual("color");
+  var color = color_env.backgroundColor;
+
+  return {
+    type: "polygon",
+    shape: {
+      points: echarts.graphic.clipPointsByRect(points, {
+        x: params.coordSys.x,
+        y: params.coordSys.y,
+        width: params.coordSys.width,
+        height: params.coordSys.height
+      })
+    },
+    style: api.style({
+      fill: color,
+      stroke: echarts.color.lift(color)
+    })
+  };
+}
+
 function GetSymbolSize(val) {
     val = val[2];
     if (val == 0) return 0;
@@ -105,7 +142,32 @@ export default {
       deep: true,
       handler(val) {
         UpdateData(val);
-        this.chart.setOption({ series: [{ data: small_data }, { data: top } ] });
+        this.chart.setOption(
+          {
+            bmap:{
+              mapStyle: color_env.mapStyle
+            },
+            series: [
+              {
+                data: small_data, 
+                itemStyle:{
+                  normal:{
+                    color: color_env.point_color 
+                  } 
+                } 
+              },{
+                data: top, 
+                itemStyle:{
+                  normal:{
+                    color: color_env.top_color 
+                  } 
+                } 
+              },{
+                renderItem: renderItem_base
+              }
+            ] 
+          }
+        );
       }
     }
   },
@@ -174,105 +236,7 @@ export default {
           center: GetCenter(data.boundary),
           zoom: data.zoom,
           roam: true,
-          mapStyle: {
-            styleJson: [{
-                'featureType': 'water',
-                'elementType': 'all',
-                'stylers': {
-                    'color': '#d1d1d1'
-                }
-            }, {
-                'featureType': 'land',
-                'elementType': 'all',
-                'stylers': {
-                    'color': '#f3f3f3'
-                }
-            }, {
-                'featureType': 'railway',
-                'elementType': 'all',
-                'stylers': {
-                    'visibility': 'off'
-                }
-            }, {
-                'featureType': 'highway',
-                'elementType': 'all',
-                'stylers': {
-                    'color': '#fdfdfd'
-                }
-            }, {
-                'featureType': 'highway',
-                'elementType': 'labels',
-                'stylers': {
-                    'visibility': 'off'
-                }
-            }, {
-                'featureType': 'arterial',
-                'elementType': 'geometry',
-                'stylers': {
-                    'color': '#fefefe'
-                }
-            }, {
-                'featureType': 'arterial',
-                'elementType': 'geometry.fill',
-                'stylers': {
-                    'color': '#fefefe'
-                }
-            }, {
-                'featureType': 'poi',
-                'elementType': 'all',
-                'stylers': {
-                    'visibility': 'off'
-                }
-            }, {
-                'featureType': 'green',
-                'elementType': 'all',
-                'stylers': {
-                    'visibility': 'off'
-                }
-            }, {
-                'featureType': 'subway',
-                'elementType': 'all',
-                'stylers': {
-                    'visibility': 'off'
-                }
-            }, {
-                'featureType': 'manmade',
-                'elementType': 'all',
-                'stylers': {
-                    'color': '#d1d1d1'
-                }
-            }, {
-                'featureType': 'local',
-                'elementType': 'all',
-                'stylers': {
-                    'color': '#d1d1d1'
-                }
-            }, {
-                'featureType': 'arterial',
-                'elementType': 'labels',
-                'stylers': {
-                    'visibility': 'off'
-                }
-            }, {
-                'featureType': 'boundary',
-                'elementType': 'all',
-                'stylers': {
-                    'color': '#fefefe'
-                }
-            }, {
-                'featureType': 'building',
-                'elementType': 'all',
-                'stylers': {
-                    'color': '#d1d1d1'
-                }
-            }, {
-                'featureType': 'label',
-                'elementType': 'labels.text.fill',
-                'stylers': {
-                    'color': '#999999'
-                }
-            }]
-          }
+          mapStyle: color_env.mapStyle
         },
         series: [
           {
@@ -298,13 +262,12 @@ export default {
                 //color: '#177cb0',
                 //color: 'Olive'
                 //color: 'orange'
-                color: 'Fuchsia'
+                //color: 'Fuchsia'
                 //color: "#ff5151" light red
-                //color: 'blue'
+                color: color_env.point_color
               }
             }
-          },
-          {
+          },{
             name: 'Top',
             type: 'effectScatter',
             coordinateSystem: 'bmap',
@@ -330,52 +293,27 @@ export default {
             },
             itemStyle: {
                 normal: {
-                    color: 'purple',
+                    color: color_env.top_color,
                     //color: 'red',
                     shadowBlur: 10,
                     shadowColor: '#333'
                 }
             },
             zlevel: 1
-        },
-          {
-            type: "custom",
-            coordinateSystem: "bmap",
-            renderItem: (params, api) => {
-              var points = [];
-              for (var i = 0; i < data.boundary.length; i++) {
-                points.push(api.coord(data.boundary[i]));
-              }
-
-              //var color = api.visual("color");
-              var color = 'yellow';
-
-              return {
-                type: "polygon",
-                shape: {
-                  points: echarts.graphic.clipPointsByRect(points, {
-                    x: params.coordSys.x,
-                    y: params.coordSys.y,
-                    width: params.coordSys.width,
-                    height: params.coordSys.height
-                  })
-                },
-                style: api.style({
-                  fill: color,
-                  stroke: echarts.color.lift(color)
-                })
-              };
-            },
-            itemStyle: {
-              normal: {
-                opacity: 0.5
-              }
-            },
-            animation: false,
-            silent: true,
-            data: [0],
-            z: -10
-          }
+        },{
+          type: "custom",
+          coordinateSystem: "bmap",
+          renderItem: renderItem_base,
+          itemStyle: {
+            normal: {
+              opacity: 0.5
+            }
+          },
+          animation: false,
+          silent: true,
+          data: [0],
+          z: -10
+        }
         ]
       });
     }

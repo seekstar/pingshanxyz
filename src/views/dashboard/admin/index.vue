@@ -1,7 +1,11 @@
 <template>
   <div class="dashboard-editor-container">
-    <el-tooltip content="坪山区人民政府官网" effect="dark" placement="bottom">
-     <github-corner class="github-corner"/>
+    <el-tooltip
+      content="坪山区人民政府官网"
+      effect="dark"
+      placement="bottom"
+    >
+      <github-corner class="github-corner" />
     </el-tooltip>
 
     <!-- <panel-group @handleSetLineChartData="handleSetLineChartData" />
@@ -23,20 +27,27 @@
             :picker-options="pickerOptionsMonth"
             :format="displayTypeMonth"
             @change="monthChange(Month)"
-          ></el-date-picker>
+          />
         </el-row>
         <el-row style="background:#fff;padding:0px 48px 0px;margin-bottom:32px;">
-          <bar-chart :chart-data="BarChartData"/>
+          <bar-chart :chart-data="BarChartData" />
         </el-row>
       </el-col>
     </el-row>
 
     <el-row :gutter="32">
       <!-- PieChart -->
-      <el-col :xs="24" :sm="24" :lg="12">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :lg="12"
+      >
         <div class="chart-wrapper">
           <el-row style="background:#fff;padding:0px 8px 0;margin-bottom:16px;">
-            <date-picker @dateChange="dateChange1" :dateData="date1"/>
+            <date-picker
+              :date-data="date1"
+              @dateChange="dateChange1"
+            />
           </el-row>
           <el-row>
             <pie-chart :chart-data="PieChartData" />
@@ -44,18 +55,28 @@
         </div>
       </el-col>
       <!-- SunburstChart -->
-      <el-col :xs="24" :sm="24" :lg="12">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :lg="12"
+      >
         <div class="chart-wrapper">
           <el-row style="background:#fff;padding:0px 8px 0;margin-bottom:16px;">
             <el-dropdown @command="handleCommand">
               <el-button type="primary">
                 {{ dateType }}
-                <i class="el-icon-arrow-down el-icon--right"></i>
+                <i class="el-icon-arrow-down el-icon--right" />
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="1">所有时间范围</el-dropdown-item>
-                <el-dropdown-item command="2">按月份选择日期</el-dropdown-item>
-                <el-dropdown-item command="3">按季度选择日期</el-dropdown-item>
+                <el-dropdown-item command="1">
+                  所有时间范围
+                </el-dropdown-item>
+                <el-dropdown-item command="2">
+                  按月份选择日期
+                </el-dropdown-item>
+                <el-dropdown-item command="3">
+                  按季度选择日期
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
 
@@ -66,9 +87,13 @@
               placeholder="选择月"
               format="yyyy年MM月"
               @change="dateChange2(Month2)"
-            ></el-date-picker>
+            />
 
-            <date-picker-quarter v-if="show3" @dateChange="dateChange3" :quarter="quarter" />
+            <date-picker-quarter
+              v-if="show3"
+              :quarter="quarter"
+              @dateChange="dateChange3"
+            />
           </el-row>
           <el-row>
             <sunburst-chart :chart-data="SunburstChartData" />
@@ -85,7 +110,12 @@
         :lg="{span: 12}"
         :xl="{span: 12}"
       >
-        <transaction-table :list="list" :page="page" :count="count" @setData="setData"/>
+        <transaction-table
+          :list="list"
+          :page="page"
+          :count="count"
+          @setData="setData"
+        />
       </el-col>
 
       <el-col
@@ -104,10 +134,10 @@
             :picker-options="pickerOptionsMonth"
             :format="displayTypeMonth3"
             @change="monthChange3(Month3)"
-          ></el-date-picker>
+          />
         </el-row>
         <el-row style="background:#fff;padding:32px 50px 50px;margin-bottom:16px;">
-          <ping-shan-map :chart-data="pingShanMapData"/>
+          <ping-shan-map :chart-data="pingShanMapData" />
         </el-row>
       </el-col>
 
@@ -304,6 +334,7 @@ const ChartData = {
     ]
   },
   pingShanMapData: {
+    choose_env: 'light_env',
     zoom: 12,
     data: [
       {name: '马峦社区', value: [114.3382030000,22.6445380000,0]},
@@ -538,6 +569,65 @@ export default {
       page: 1,
       interval: null
     };
+  },
+  beforeCreate() {
+    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    getDataVersion().then(resp => {
+      if(this.version != resp.data){
+        //console.log("!!!!!!!!!!!!!!")
+        this.version = resp.data;
+        this.setAbnormalData();//实时更新异常数据
+        this.monthChange(this.Month);//实时更新BarChart
+        this.dateChange1(this.date1);//实时更新PieChart
+
+        //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
+        if(this.dateType == "所有时间范围"){//实时更新SunburstChart
+          this.setSunburstChartData(1, 1, 1);
+        }else if(this.dateType == "按月份选择日期"){
+          this.dateChange2(this.Month2);
+        }else{
+          this.dateChange3(this.quarter);
+        }
+
+        this.setData(this.page);//实时更新最近发生事件列表
+
+        this.monthChange3(this.Month3);//实时更新地图数据
+      }
+    })
+
+  
+  },
+  mounted(){
+      this.interval = setInterval( () => {
+      getDataVersion().then(resp => {
+        //console.log(resp.data)
+        if(this.version != resp.data){
+          this.version = resp.data;
+          this.setAbnormalData();//实时更新异常数据
+          this.monthChange(this.Month);//实时更新BarChart
+          this.dateChange1(this.date1);//实时更新PieChart
+
+          //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
+          if(this.dateType == "所有时间范围"){//实时更新SunburstChart
+            this.setSunburstChartData(1, 1, 1);
+          }else if(this.dateType == "按月份选择日期"){
+            this.dateChange2(this.Month2);
+          }else{
+            this.dateChange3(this.quarter);
+          }
+
+          this.setData(this.page);//实时更新最近发生事件列表
+
+          this.monthChange3(this.Month3);//实时更新地图数据
+        }
+      })
+      //console.log("定时器正在运行！！")
+      //console.log(this.interval)
+    }, 1000)
+    
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
   },
   methods: {
     setPieChartData(from, to) {
@@ -777,65 +867,6 @@ export default {
       }
       //console.log(date);
     }
-  },
-  beforeCreate() {
-    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    getDataVersion().then(resp => {
-      if(this.version != resp.data){
-        //console.log("!!!!!!!!!!!!!!")
-        this.version = resp.data;
-        this.setAbnormalData();//实时更新异常数据
-        this.monthChange(this.Month);//实时更新BarChart
-        this.dateChange1(this.date1);//实时更新PieChart
-
-        //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
-        if(this.dateType == "所有时间范围"){//实时更新SunburstChart
-          this.setSunburstChartData(1, 1, 1);
-        }else if(this.dateType == "按月份选择日期"){
-          this.dateChange2(this.Month2);
-        }else{
-          this.dateChange3(this.quarter);
-        }
-
-        this.setData(this.page);//实时更新最近发生事件列表
-
-        this.monthChange3(this.Month3);//实时更新地图数据
-      }
-    })
-
-  
-  },
-  mounted(){
-      this.interval = setInterval( () => {
-      getDataVersion().then(resp => {
-        //console.log(resp.data)
-        if(this.version != resp.data){
-          this.version = resp.data;
-          this.setAbnormalData();//实时更新异常数据
-          this.monthChange(this.Month);//实时更新BarChart
-          this.dateChange1(this.date1);//实时更新PieChart
-
-          //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
-          if(this.dateType == "所有时间范围"){//实时更新SunburstChart
-            this.setSunburstChartData(1, 1, 1);
-          }else if(this.dateType == "按月份选择日期"){
-            this.dateChange2(this.Month2);
-          }else{
-            this.dateChange3(this.quarter);
-          }
-
-          this.setData(this.page);//实时更新最近发生事件列表
-
-          this.monthChange3(this.Month3);//实时更新地图数据
-        }
-      })
-      //console.log("定时器正在运行！！")
-      //console.log(this.interval)
-    }, 1000)
-    
-  },
-  beforeDestroy() {
-    clearInterval(this.interval)
   }
 };
 </script>
