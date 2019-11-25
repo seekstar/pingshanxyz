@@ -1,5 +1,8 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div
+    :class="className"
+    :style="{height:height,width:width}"
+  />
 </template>
 
 <script>
@@ -60,6 +63,7 @@ export default {
 
     setOptions(data) {
       this.chart.setOption({
+        //backgroundColor: 'black',
         toolbox:{
           feature:{
             saveAsImage:{}
@@ -90,6 +94,8 @@ export default {
             //radius: [15, 95],
             center: ['50%', '50%'],
             data: data.properties,
+            //color: ['#006666', '#0066ff', '#663300'],
+            //color: null,
             animationEasing: 'cubicInOut',
             animationDuration: 2600,
             itemStyle: {

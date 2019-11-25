@@ -131,3 +131,15 @@ export function getDataVersion(){
         method: 'get'
     })
 }
+
+export function getTotalNumOfEachStatus(date) {
+    var ret = [];
+    for (var i = 0; i < 6; ++i) {   //求决等
+        var tmp = [];
+        for (var j = 0; j < 3; ++j) {   //按期结办等
+            tmp.push(Math.random() * 100);
+        }
+        ret.push(tmp);
+    }
+    return ret;
+}

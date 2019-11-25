@@ -8,12 +8,11 @@
       <github-corner class="github-corner" />
     </el-tooltip>
 
-    <!-- <panel-group @handleSetLineChartData="handleSetLineChartData" />
+    <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart :chart-data="lineChartData" />
-    </el-row> -->
-    <!--  -->
+    </el-row>
 
     <!-- BarChart -->
     <el-row class="chart-wrapper">
@@ -189,8 +188,12 @@ import {
   getDetailedData,
   getMapData,
   getDataVersion,
-  getDataCount
+  getDataCount,
+  getTotalNumOfEachStatus
 } from "@/api/getdata";
+
+//require("./lib/date.format");
+import "./components/lib/date.format";
 
 function getNowDate() {
   //将当前时间初始化为2018-10-30 + 当前时间
@@ -491,23 +494,6 @@ const ChartData = {
       // }
     ]
   },
-
-  newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
-  },
-  messages: {
-    expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
-  },
-  purchases: {
-    expectedData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
-  },
-  shoppings: {
-    expectedData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
-  }
 };
 
 export default {
@@ -534,14 +520,92 @@ export default {
       BarChartData: ChartData.types_street,
       PieChartData: ChartData.properties,
       SunburstChartData: ChartData.status_type,
-      lineChartData: ChartData.newVisitis,
-      lineChartDataTable: [
-        ChartData.newVisitis,
-        ChartData.messages,
-        ChartData.purchases,
-        ChartData.shoppings
-      ],
       pingShanMapData: ChartData.pingShanMapData,
+
+      lineChartXNames: [],
+      lineChartDataTable: [
+        //name: '求决',
+        [
+          {
+            name: '按期办结',
+            data: []
+          },{
+            name: '超期办结',
+            data: []
+          },{
+            name: '处置中',
+            data: []
+          }
+        ]
+        //name: '投诉',
+        ,[
+          {
+            name: '按期办结',
+            data: []
+          },{
+            name: '超期办结',
+            data: []
+          },{
+            name: '处置中',
+            data: []
+          }
+        ]
+        //name: '咨询',
+        ,[
+          {
+            name: '按期办结',
+            data: []
+          },{
+            name: '超期办结',
+            data: []
+          },{
+            name: '处置中',
+            data: []
+          }
+        ]
+        //name: '建议',
+        ,[
+          {
+            name: '按期办结',
+            data: []
+          },{
+            name: '超期办结',
+            data: []
+          },{
+            name: '处置中',
+            data: []
+          }
+        ]
+        //name: '感谢',
+        ,[
+          {
+            name: '按期办结',
+            data: []
+          },{
+            name: '超期办结',
+            data: []
+          },{
+            name: '处置中',
+            data: []
+          }
+        ]
+        //name: '其他',
+        ,[
+          {
+            name: '按期办结',
+            data: []
+          },{
+            name: '超期办结',
+            data: []
+          },{
+            name: '处置中',
+            data: []
+          }
+        ]
+      ],
+      lastLineChartType: null,
+      lineChartData: null,
+
       Month: getNowDate(),
       Month2: getNowDate(),
       Month3: getNowDate(),
@@ -593,9 +657,21 @@ export default {
 
         this.monthChange3(this.Month3);//实时更新地图数据
       }
-    })
-
-  
+    });
+  },
+  beforeMount() {
+    const day = 24*60*60*1000;
+    var now = new Date();
+    now = new Date(now.getTime() - 7 * day);
+    for (var i = 0; i < 7; ++i) {
+      now = new Date(now.getTime() + day);
+      var formatted_date = now.format('yyyy-mm-dd');
+      this.pushLineChartData({
+        date: formatted_date,
+        value: getTotalNumOfEachStatus(formatted_date)
+      });
+    }
+    this.handleSetLineChartData(0);
   },
   mounted(){
       this.interval = setInterval( () => {
@@ -768,7 +844,11 @@ export default {
       })
     },
     handleSetLineChartData(type) {
-      this.lineChartData = this.lineChartDataTable[type];
+      this.lastLineChartType = type;
+      this.lineChartData = {
+        xnames: this.lineChartXNames,
+        data: this.lineChartDataTable[type]
+      };
     },
     dateChange1(date) {
       this.date1 = date
@@ -866,6 +946,28 @@ export default {
         this.setMapData(-1, -1);
       }
       //console.log(date);
+    },
+
+    pushLineChartData(new_day) {
+      this.lineChartXNames.push(new_day.date);
+      for (var i = 0; i < new_day.value.length; ++i) {
+        for (var j = 0; j < new_day.value[i].length; ++j) {
+          this.lineChartDataTable[i][j].data.push(new_day.value[i][j]);
+        }
+      }
+    },
+    shiftLineChartData() {
+      this.lineChartXNames.shift();
+      for (var i = 0; i < this.lineChartDataTable.length; ++i) {
+        for (var j = 0; j < this.lineChartDataTable[i].length; ++j) {
+          this.lineChartDataTable[i][j].data.shift();
+        }
+      }
+    },
+    UpdateLineChartData(new_day) {
+      this.pushLineChartData(new_day);
+      this.shiftLineChartData();
+      this.handleSetLineChartData(this.lastLineChartType);  //refresh
     }
   }
 };
