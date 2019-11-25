@@ -17,12 +17,6 @@
           <div class="card-panel-text">
             求决
           </div>
-          <count-to
-            :start-val="0"
-            :end-val="102400"
-            :duration="2600"
-            class="card-panel-num"
-          />
         </div>
       </div>
     </el-col>
@@ -41,12 +35,6 @@
           <div class="card-panel-text">
             投诉
           </div>
-          <count-to
-            :start-val="0"
-            :end-val="102400"
-            :duration="2600"
-            class="card-panel-num"
-          />
         </div>
       </div>
     </el-col>
@@ -65,12 +53,6 @@
           <div class="card-panel-text">
             咨询
           </div>
-          <count-to
-            :start-val="0"
-            :end-val="102400"
-            :duration="2600"
-            class="card-panel-num"
-          />
         </div>
       </div>
     </el-col>
@@ -89,12 +71,6 @@
           <div class="card-panel-text">
             建议
           </div>
-          <count-to
-            :start-val="0"
-            :end-val="102400"
-            :duration="2600"
-            class="card-panel-num"
-          />
         </div>
       </div>
     </el-col>
@@ -113,12 +89,6 @@
           <div class="card-panel-text">
             感谢
           </div>
-          <count-to
-            :start-val="0"
-            :end-val="102400"
-            :duration="2600"
-            class="card-panel-num"
-          />
         </div>
       </div>
     </el-col>
@@ -137,12 +107,6 @@
           <div class="card-panel-text">
             其他
           </div>
-          <count-to
-            :start-val="0"
-            :end-val="102400"
-            :duration="2600"
-            class="card-panel-num"
-          />
         </div>
       </div>
     </el-col>
