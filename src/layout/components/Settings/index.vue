@@ -22,6 +22,10 @@
         <el-switch v-model="test" class="drawer-switch" @change="testChange" />
       </div>
       <div class="drawer-item">
+        <span>短信测试</span>
+        <el-switch v-model="phone" class="drawer-switch" @change="testPhone" />
+      </div>
+      <div class="drawer-item">
         <span>清理测试</span>
         <el-button  class="drawer-switch" type="danger" icon="el-icon-delete" @click="testClean" size="mini" round />
       </div>
@@ -31,14 +35,16 @@
 </template>
 
 <script>
-import {startTest,stopTest,cleanTest,getTest} from '@/api/test'
+import {startTest,stopTest,cleanTest,getTest,startPhone,stopPhone,getPhone} from '@/api/test'
 import getters from '../../../store/getters'
 export default {
   data() {
-    return {test:false}
+    return {test:false,
+    phone:false}
   },
   created:function(){
     getTest().then(resp=>{this.test=resp.data})
+    getPhone().then(resp=>{this.phone=resp.data})
   },
   computed: {
     fixedHeader: {
@@ -81,6 +87,10 @@ export default {
     testChange(val){
       if(val)startTest()
       else stopTest()
+    },
+    testPhone(val){
+      if(val)startPhone()
+      else stopPhone()
     },
     testClean(){
      cleanTest()

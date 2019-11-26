@@ -21,17 +21,7 @@ import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 import { Message } from 'element-ui';
-import {
-  getPieChartData,
-  getBarChartData,
-  getSunburstChartData,
-  getAbnormalData,
-  getDetailedData,
-  getMapData,
-  getDataVersion,
-  //getDataCount,
-  getTotalNumOfEachStatus
-} from "@/api/getdata";
+import { getAbnormalData,getDataVersion } from "@/api/getdata";
 
 
 export default {
