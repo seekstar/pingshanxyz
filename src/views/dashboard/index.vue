@@ -8,11 +8,11 @@
       <github-corner class="github-corner" />
     </el-tooltip>
 
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
+    <!-- <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart :chart-data="lineChartData" />
-    </el-row>
+    </el-row> -->
 
     <!-- BarChart -->
     <el-row class="chart-wrapper">
@@ -528,81 +528,135 @@ export default {
       count:0,
       lineChartXNames: [],
       lineChartDataTable: [
-        //name: '求决',
+        //name: '碧岭街道',
         [
           {
-            name: '按期办结',
+            name: '求决',
             data: []
           },{
-            name: '超期办结',
+            name: '投诉',
             data: []
           },{
-            name: '处置中',
+            name: '咨询',
+            data: []
+          },{
+            name: '建议',
+            data: []
+          },{
+            name: '感谢',
+            data: []
+          },{
+            name: '其他',
             data: []
           }
-        ]
-        //name: '投诉',
-        ,[
+        ],
+        //name: '龙田街道',
+        [
           {
-            name: '按期办结',
+            name: '求决',
             data: []
           },{
-            name: '超期办结',
+            name: '投诉',
             data: []
           },{
-            name: '处置中',
+            name: '咨询',
+            data: []
+          },{
+            name: '建议',
+            data: []
+          },{
+            name: '感谢',
+            data: []
+          },{
+            name: '其他',
             data: []
           }
-        ]
-        //name: '咨询',
-        ,[
+        ],
+        //name: '马峦街道',
+        [
           {
-            name: '按期办结',
+            name: '求决',
             data: []
           },{
-            name: '超期办结',
+            name: '投诉',
             data: []
           },{
-            name: '处置中',
+            name: '咨询',
+            data: []
+          },{
+            name: '建议',
+            data: []
+          },{
+            name: '感谢',
+            data: []
+          },{
+            name: '其他',
             data: []
           }
-        ]
-        //name: '建议',
-        ,[
+        ],
+        //name: '石井街道',
+        [
           {
-            name: '按期办结',
+            name: '求决',
             data: []
           },{
-            name: '超期办结',
+            name: '投诉',
             data: []
           },{
-            name: '处置中',
+            name: '咨询',
+            data: []
+          },{
+            name: '建议',
+            data: []
+          },{
+            name: '感谢',
+            data: []
+          },{
+            name: '其他',
             data: []
           }
-        ]
-        //name: '感谢',
-        ,[
+        ],
+        //name: '坪山街道',
+        [
           {
-            name: '按期办结',
+            name: '求决',
             data: []
           },{
-            name: '超期办结',
+            name: '投诉',
             data: []
           },{
-            name: '处置中',
+            name: '咨询',
+            data: []
+          },{
+            name: '建议',
+            data: []
+          },{
+            name: '感谢',
+            data: []
+          },{
+            name: '其他',
             data: []
           }
-        ]
-        //name: '其他',
-        ,[
+        ],
+        //name: '坑梓街道',
+        [
           {
-            name: '按期办结',
+            name: '求决',
             data: []
           },{
-            name: '超期办结',
+            name: '投诉',
             data: []
           },{
-            name: '处置中',
+            name: '咨询',
+            data: []
+          },{
+            name: '建议',
+            data: []
+          },{
+            name: '感谢',
+            data: []
+          },{
+            name: '其他',
             data: []
           }
         ]
