@@ -1,9 +1,18 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
-
+    <!-- <table style="margin-left:0px;"> -->
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      autocomplete="on"
+      label-position="left"
+    >
       <div class="title-container">
-        <h3 class="title">深圳市坪山区民生诉求数据分析系统</h3>
+        <h3 class="title">
+          深圳市坪山区民生诉求数据分析系统
+        </h3>
       </div>
 
       <el-form-item prop="username">
@@ -21,7 +30,12 @@
         />
       </el-form-item>
 
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+      <el-tooltip
+        v-model="capsTooltip"
+        content="Caps lock is On"
+        placement="right"
+        manual
+      >
         <el-form-item prop="password">
           <span class="svg-container">
             <svg-icon icon-class="password" />
@@ -39,31 +53,45 @@
             @blur="capsTooltip = false"
             @keyup.enter.native="handleLogin"
           />
-          <span class="show-pwd" @click="showPwd">
+          <span
+            class="show-pwd"
+            @click="showPwd"
+          >
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
           </span>
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin(loginForm)">登录</el-button>
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin(loginForm)"
+      >
+        登录
+      </el-button>
 
       <!-- <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
+          <div class="tips">
+            <span>Username : admin</span>
+            <span>Password : any</span>
+          </div>
+          <div class="tips">
+            <span style="margin-right:18px;">Username : editor</span>
+            <span>Password : any</span>
+          </div>
 
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
-      </div> -->
+          <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
+            Or connect with
+          </el-button>
+        </div> -->
     </el-form>
+    <!-- </table> -->
 
-    <el-dialog title="Or connect with" :visible.sync="showDialog">
+    <el-dialog
+      title="Or connect with"
+      :visible.sync="showDialog"
+    >
       Can not be simulated on local, so please combine you own business simulation! ! !
       <br>
       <br>
@@ -235,8 +263,11 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
+//$light_gray:#fff;
+$blue: rgb(13, 141, 226);
+$cursor: $blue;
+$word_col: $blue;
+$input_col: #000;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -257,7 +288,7 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: $input_col;
       height: 47px;
       caret-color: $cursor;
 
@@ -272,7 +303,8 @@ $cursor: #fff;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    color: #454545;
+    //color: #454545;
+    color: $blue;
   }
 }
 </style>
@@ -282,12 +314,18 @@ $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
+$dark_blue: rgb(13, 76, 119);
+$word_col: $dark_blue;
+
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
-  //background-image: url("https://pingshan.xyz/backgroundImage1.jpg");
+  //background-color: $bg;
+  background: url("./components/backgroundImage1.jpg") no-repeat center;
+  background-size: cover; //覆盖整个页面
+  position: absolute;
   overflow: hidden;
+  
   // position:fixed;
   // top: 0;
   // left: 0;
@@ -304,11 +342,12 @@ $light_gray:#eee;
   // background-position: center 0;
 
   .login-form {
-    position: relative;
-    width: 520px;
+    margin-left: 1400px;
+    position: right;
+    width: 400px;
     max-width: 100%;
     padding: 200px 35px 0;
-    margin: 0 auto;
+    //margin: 10 left;
     overflow: hidden;
   }
 
@@ -337,7 +376,7 @@ $light_gray:#eee;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
+      color: $word_col;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
@@ -349,7 +388,8 @@ $light_gray:#eee;
     right: 10px;
     top: 7px;
     font-size: 16px;
-    color: $dark_gray;
+    //color: $dark_gray;
+    color: $word_col;
     cursor: pointer;
     user-select: none;
   }
