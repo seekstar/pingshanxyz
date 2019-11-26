@@ -1,7 +1,43 @@
 <template>
   <div style="background: #fff;width: 100%;padding-top: 15px;margin-bottom:32px;">
     <!-- <span class="demonstration">最近事件实时显示：</span> -->
-  
+  <div class="filter-container" style="text-align:center">
+    <span> 问题性质: </span>
+      <el-select v-model="property" placeholder="问题性质" class="filter-item"
+        @change="handleFilter">
+        <el-option label="全部" value=全部></el-option>
+        <el-option label="求决" value="求决"></el-option>
+        <el-option label="投诉" value="投诉"></el-option>
+        <el-option label="咨询" value="咨询"></el-option>
+        <el-option label="建议" value="建议"></el-option>
+        <el-option label="感谢" value="感谢"></el-option>
+        <el-option label="其他" value="其他"></el-option>
+      </el-select>
+      <span> 排序方式: </span>
+      <el-select
+        v-model="sort"
+        class="filter-item"
+        @change="handleFilter"
+      >
+        <el-option
+          v-for="item in sortOptions"
+          :key="item.key"
+          :label="item.label"
+          :value="item.key"
+        />
+      </el-select>
+      <el-button
+        v-waves
+        :loading="downloadLoading"
+        class="filter-item"
+        type="primary"
+        icon="el-icon-download"
+        @click="handleDownload"
+      >
+        导出
+      </el-button>
+
+      </div>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -74,6 +110,15 @@
         <template slot-scope="scope">
           {{ scope.row.small }}
         </template>
+        </el-table-column>
+         <el-table-column
+        label="问题来源"
+        min-width="50"
+        align="center"
+      >
+        <template slot-scope="scope">
+          {{ scope.row.source }}
+        </template>
       </el-table-column>
       <el-table-column
         label="处理部门"
@@ -120,31 +165,47 @@
       :limit.sync="limit"
       @pagination="getData"
     />
+     <el-tooltip placement="top" content="返回顶部">
+      <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
+    </el-tooltip>
   </div>
 </template>
 
 <script>
 //import { transactionList } from '@/api/remote-search'
+import BackToTop from '@/components/BackToTop'
 import { getMyData,getDataVersion } from '@/api/getdata'
 import { putMyData } from '@/api/putdata'
 import Pagination from '@/components/Pagination' 
+import waves from '@/directive/waves' // waves directive
 export default {
-  components: { Pagination },
+  components: { Pagination,BackToTop },
+  directives: { waves },
   filters: {
     timeFilter(str) {
       return str.substring(0, 10) + ' ' + str.substring(11, 19)
     }
   },
   data() {
-    return {
+    return {myBackToTopStyle: {
+        right: '50px',
+        bottom: '50px',
+        width: '40px',
+        height: '40px',
+        'border-radius': '4px',
+        'line-height': '45px', // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
+        background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
+      },
       list:[],
       version:0,
       total:0,
+      property:"全部",
       page:1,
       limit:20,
       sort:'DESC',
       listLoading:true,
       sortOptions: [{ label: '时间倒序', key: 'DESC' }, { label: '时间正序', key: 'ASC' }],
+      downloadLoading:false
     }
   },
   created() {
@@ -157,7 +218,24 @@ export default {
     clearInterval(this.interval)
   },
   methods: 
-  {sortChange(data) {
+  {handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['序号', '统计时间', '所属街道和社区', '问题性质', '问题类型','问题大类','问题小类','问题来源','处置部门']
+        const filterVal = ['id', 'time', 'position', 'attr', 'type','big','small','source','department']
+        const data = this.formatJson(filterVal, this.list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: 'table-list'
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {return v[j]}))
+    },
+  sortChange(data) {
       const { prop, order } = data
       if (prop === 'time') {
         this.sortByID(order)
@@ -186,6 +264,7 @@ export default {
 
         
       },
+
       handleAbnormal(index, row) {
         this.listLoading = true
         putMyData({
@@ -198,7 +277,7 @@ export default {
     ,
     getData(){
       this.listLoading = true
-      getMyData(this.page,this.limit,this.sort).then(resp => {
+      getMyData(this.page,this.limit,this.sort,this.property).then(resp => {
           this.total=resp.data.total
           this.list=[]  
           for(var i=0 ; i<resp.data.items.length ; ++i){
@@ -211,7 +290,8 @@ export default {
               big: resp.data.items[i]['大类名称'],
               small: resp.data.items[i]['小类名称'],
               department: resp.data.items[i]['处置部门'],
-              status: resp.data.items[i]['处置状态']
+              status: resp.data.items[i]['处置状态'],
+              source: resp.data.items[i]['问题来源']
             })
           }
           this.listLoading = false
@@ -221,7 +301,7 @@ export default {
         getDataVersion().then(resp=>{
           if(this.version != resp.data){
             this.version = resp.data
-            getMyData(this.page,this.limit,this.sort).then(resp => {
+            getMyData(this.page,this.limit,this.sort,this.property).then(resp => {
           this.list=[]  
           for(var i=0 ; i<resp.data.items.length ; ++i){
   
@@ -234,7 +314,8 @@ export default {
               big: resp.data.items[i]['大类名称'],
               small: resp.data.items[i]['小类名称'],
               department: resp.data.items[i]['处置部门'],
-              status: resp.data.items[i]['处置状态']
+              status: resp.data.items[i]['处置状态'],
+              source: resp.data.items[i]['问题来源']
             })
           }
         })

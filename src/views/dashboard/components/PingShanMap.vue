@@ -1,21 +1,15 @@
 <template>
-  <div
-    :class="className"
-    :style="{height:height,width:width}"
-  />
+  <div :class="className" :style="{height:height,width:width}" />
 </template>
 
 <script>
 import echarts from "echarts";
 require("echarts/theme/macarons"); // echarts theme
 import resize from "./mixins/resize";
-import { color } from 'echarts/lib/export';
 require("echarts/extension/bmap/bmap"); ///   如果不引入 那么会 报错：api.coord is not a function"
 
-import { colors } from "./lib/colors";
+var DEBUG = false;
 
-
-//var DEBUG = false;
 
 function GetCenter(bdry) {
   var sum = [0, 0];
@@ -30,14 +24,12 @@ function GetCenter(bdry) {
 
 
 
+
 var data = null;
 
 var mx = null;
 var small_data = null;
 var top = null;
-
-var color_env = null;
-//var renderItem = null;
 
 function UpdateData(new_data) {
   data = new_data;
@@ -59,39 +51,13 @@ function UpdateData(new_data) {
       top.push(v);
     }
   }
-
-  color_env = colors[data.choose_env];
-  /*renderItem = (params, api) => {
-    return renderItem_base(params, api, color_env);
-  }*/
-}
-
-function renderItem_base(params, api) {
-  var points = [];
-  for (var i = 0; i < data.boundary.length; i++) {
-    points.push(api.coord(data.boundary[i]));
+  if (DEBUG) {
+    console.log("small_data:");
+    console.log(small_data);
+    console.log("top:");
+    console.log(top);
   }
-
-  //var color = api.visual("color");
-  var color = color_env.backgroundColor;
-
-  return {
-    type: "polygon",
-    shape: {
-      points: echarts.graphic.clipPointsByRect(points, {
-        x: params.coordSys.x,
-        y: params.coordSys.y,
-        width: params.coordSys.width,
-        height: params.coordSys.height
-      })
-    },
-    style: api.style({
-      fill: color,
-      stroke: echarts.color.lift(color)
-    })
-  };
 }
-
 function GetSymbolSize(val) {
     val = val[2];
     if (val == 0) return 0;
@@ -142,32 +108,7 @@ export default {
       deep: true,
       handler(val) {
         UpdateData(val);
-        this.chart.setOption(
-          {
-            bmap:{
-              mapStyle: color_env.mapStyle
-            },
-            series: [
-              {
-                data: small_data, 
-                itemStyle:{
-                  normal:{
-                    color: color_env.point_color 
-                  } 
-                } 
-              },{
-                data: top, 
-                itemStyle:{
-                  normal:{
-                    color: color_env.top_color 
-                  } 
-                } 
-              },{
-                renderItem: renderItem_base
-              }
-            ] 
-          }
-        );
+        this.chart.setOption({ series: [{ data: small_data }, { data: top } ] });
       }
     }
   },
@@ -198,6 +139,7 @@ export default {
         }
         // 百度地图异步加载回调处理
         window.onBMapCallback = function() {
+          //console.log("百度地图脚本初始化成功...");
           resolve(BMap);
         };
 
@@ -214,6 +156,9 @@ export default {
       });
     },
     setOptions() {
+      if (DEBUG) {
+        console.log("refreshing PingShanMap");
+      }
       this.chart.setOption({
         backgroundColor: "transparent",
         title: {
@@ -236,7 +181,105 @@ export default {
           center: GetCenter(data.boundary),
           zoom: data.zoom,
           roam: true,
-          mapStyle: color_env.mapStyle
+          mapStyle: {
+               styleJson: [{
+                'featureType': 'water',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#d1d1d1'
+                }
+            }, {
+                'featureType': 'land',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#f3f3f3'
+                }
+            }, {
+                'featureType': 'railway',
+                'elementType': 'all',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'highway',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#fdfdfd'
+                }
+            }, {
+                'featureType': 'highway',
+                'elementType': 'labels',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'arterial',
+                'elementType': 'geometry',
+                'stylers': {
+                    'color': '#fefefe'
+                }
+            }, {
+                'featureType': 'arterial',
+                'elementType': 'geometry.fill',
+                'stylers': {
+                    'color': '#fefefe'
+                }
+            }, {
+                'featureType': 'poi',
+                'elementType': 'all',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'green',
+                'elementType': 'all',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'subway',
+                'elementType': 'all',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'manmade',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#d1d1d1'
+                }
+            }, {
+                'featureType': 'local',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#d1d1d1'
+                }
+            }, {
+                'featureType': 'arterial',
+                'elementType': 'labels',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'boundary',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#fefefe'
+                }
+            }, {
+                'featureType': 'building',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#d1d1d1'
+                }
+            }, {
+                'featureType': 'label',
+                'elementType': 'labels.text.fill',
+                'stylers': {
+                    'color': '#999999'
+                }
+            }]
+          }
         },
         series: [
           {
@@ -263,11 +306,11 @@ export default {
                 //color: 'Olive'
                 //color: 'orange'
                 //color: 'Fuchsia'
-                //color: "#ff5151" light red
-                color: color_env.point_color
+                color: "#ff5151"
               }
             }
-          },{
+          },
+          {
             name: 'Top',
             type: 'effectScatter',
             coordinateSystem: 'bmap',
@@ -293,27 +336,51 @@ export default {
             },
             itemStyle: {
                 normal: {
-                    color: color_env.top_color,
+                    color: 'purple',
                     //color: 'red',
                     shadowBlur: 10,
                     shadowColor: '#333'
                 }
             },
             zlevel: 1
-        },{
-          type: "custom",
-          coordinateSystem: "bmap",
-          renderItem: renderItem_base,
-          itemStyle: {
-            normal: {
-              opacity: 0.5
-            }
-          },
-          animation: false,
-          silent: true,
-          data: [0],
-          z: -10
-        }
+        },
+          {
+            type: "custom",
+            coordinateSystem: "bmap",
+            renderItem: (params, api) => {
+              var points = [];
+              for (var i = 0; i < data.boundary.length; i++) {
+                points.push(api.coord(data.boundary[i]));
+              }
+
+              var color = api.visual("color");
+
+              return {
+                type: "polygon",
+                shape: {
+                  points: echarts.graphic.clipPointsByRect(points, {
+                    x: params.coordSys.x,
+                    y: params.coordSys.y,
+                    width: params.coordSys.width,
+                    height: params.coordSys.height
+                  })
+                },
+                style: api.style({
+                  fill: color,
+                  stroke: echarts.color.lift(color)
+                })
+              };
+            },
+            itemStyle: {
+              normal: {
+                opacity: 0.5
+              }
+            },
+            animation: false,
+            silent: true,
+            data: [0],
+            z: -10
+          }
         ]
       });
     }

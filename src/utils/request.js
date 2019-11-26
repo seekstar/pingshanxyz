@@ -53,6 +53,12 @@ service.interceptors.response.use(
           type: 'error',
           duration: 5 * 1000
         })
+      } else if (res.code == 60203) {
+        Message({
+          message: res.message || '用户已存在',
+          type: 'error',
+          duration: 5 * 1000
+        })
       }else if (res.code == 60204){
         Message({
           message: res.message || '用户名或密码错误',

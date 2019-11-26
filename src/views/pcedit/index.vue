@@ -238,7 +238,7 @@ export default {
       }
 
       putData(this.form).then(resp => {
-        console.log(resp)
+        //console.log(resp)
         Message({
           message: "事件登记成功！",
           type: "success",

@@ -24,3 +24,22 @@ export function getTest() {
         method: 'get'
     })
 }
+
+export function startPhone() {
+    return request({
+        url: '/phone/start',
+        method: 'put'
+    })
+}
+export function stopPhone() {
+    return request({
+        url: '/phone/stop',
+        method: 'put'
+    })
+}
+export function getPhone() {
+    return request({
+        url: '/phone',
+        method: 'get'
+    })
+}
