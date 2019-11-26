@@ -185,7 +185,6 @@ import {
   getPieChartData,
   getBarChartData,
   getSunburstChartData,
-  getAbnormalData,
   getDetailedData,
   getMapData,
   getDataVersion,
@@ -522,7 +521,6 @@ export default {
         'line-height': '45px', // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
         background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
       },
-      allErrorLog: [],
       BarChartData: ChartData.types_street,
       PieChartData: ChartData.properties,
       SunburstChartData: ChartData.status_type,
@@ -642,12 +640,9 @@ export default {
     };
   },
   beforeCreate() {
-    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     getDataVersion().then(resp => {
       if(this.version != resp.data){
-        //console.log("!!!!!!!!!!!!!!")
         this.version = resp.data;
-        this.setAbnormalData();//实时更新异常数据
         this.monthChange(this.Month);//实时更新BarChart
         this.dateChange1(this.date1);//实时更新PieChart
 
@@ -681,12 +676,11 @@ export default {
     this.handleSetLineChartData(0);
   },
   mounted(){
-      this.interval = setInterval( () => {
+    this.interval = setInterval( () => {
       getDataVersion().then(resp => {
         //console.log(resp.data)
         if(this.version != resp.data){
           this.version = resp.data;
-          this.setAbnormalData();//实时更新异常数据
           this.monthChange(this.Month);//实时更新BarChart
           this.dateChange1(this.date1);//实时更新PieChart
 
@@ -825,28 +819,6 @@ export default {
         if(JSON.stringify(this.SunburstChartData) != JSON.stringify(tmp))
           this.SunburstChartData = tmp;
       });
-    },
-    setAbnormalData(){
-      getAbnormalData().then(resp => {
-        //console.log(resp.data)
-        for(let item of resp.data){
-          if(this.allErrorLog.indexOf(item) == -1){
-            Message({
-              message: item,
-              type: "error",
-              duration: 5 * 1000
-            });
-            this.$store.dispatch('errorLog/addErrorLog',
-              {
-                err:{
-                  message: item
-                }
-              }
-            )
-            this.allErrorLog.push(item)
-          }
-        }
-      })
     },
     handleSetLineChartData(type) {
       this.lastLineChartType = type;
