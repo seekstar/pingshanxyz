@@ -322,10 +322,10 @@ $dark_gray:#889aa4;
 $dark_blue: rgb(13, 76, 119);
 $word_col: $dark_blue;
 
-.aside {
+/*.aside {
   position: absolute;
   top: 0;
-  right: 1;
+  right: 0;
   width: 36%;
   bottom: 0;
   transition: {
@@ -334,7 +334,7 @@ $word_col: $dark_blue;
     transition-timing-function: ease-out;
     transition-delay: 0s;
   }
-}
+}*/
 .login-container {
   min-height: 100%;
   width: 100%;
@@ -360,10 +360,12 @@ $word_col: $dark_blue;
   // background-position: center 0;
 
   .login-form {
-    margin-left: 1400px;
+    //margin-left: 1400px;
+    margin-left: 70%;
     position: absolute;
     top: 20%;
-    width: 400px;
+    //width: 400px;
+    width: 20%;
     max-width: 100%;
     padding: 50px 35px 0;
     //margin: 10 left;
