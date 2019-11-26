@@ -172,7 +172,7 @@ export default {
   data() {
     return {
       form: {
-        avatar: "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80",
+        avatar: "https://pingshan.xyz/avatar/default.jpg",
         username: "",
         password:"",
         roles: ['处理员'],

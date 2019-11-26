@@ -1,12 +1,7 @@
 <template>
   <div class="drawer-container">
     <div>
-      <h3 class="drawer-title">页面样式设置</h3>
-
-      <div class="drawer-item">
-        <span>主题颜色</span>
-        <theme-picker style="float: right;height: 26px;margin: -3px 8px 0 0;" @change="themeChange" />
-      </div>
+      <h3 class="drawer-title">设置</h3>
 
       <div class="drawer-item">
         <span>页面标签开关</span>
@@ -36,11 +31,9 @@
 </template>
 
 <script>
-import ThemePicker from '@/components/ThemePicker'
 import {startTest,stopTest,cleanTest,getTest} from '@/api/test'
 import getters from '../../../store/getters'
 export default {
-  components: { ThemePicker },
   data() {
     return {test:false}
   },
@@ -85,16 +78,9 @@ export default {
   },
   
   methods: {
-    themeChange(val) {
-      this.$store.dispatch('settings/changeSetting', {
-        key: 'theme',
-        value: val
-      })
-    },
     testChange(val){
       if(val)startTest()
       else stopTest()
-
     },
     testClean(){
      cleanTest()
