@@ -123,7 +123,7 @@ export default {
     handleCurrentChange(val) {
       //this.page=val
       this.$emit('getData', Number(val));
-      }
+    }
   }
 }
 </script>
