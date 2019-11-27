@@ -120,9 +120,8 @@ export default {
   //   }, 5000)
   // },
   methods: {
-
     handleCurrentChange(val) {
-      this.page=val
+      //this.page=val
       this.$emit('getData', Number(val));
       }
   }
