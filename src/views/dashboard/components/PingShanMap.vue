@@ -45,7 +45,7 @@ function UpdateData(new_data) {
   small_data = [];
   top = [];
   for (var v of tmp) {
-    if (GetSymbolSize(v.value) < 13) {
+    if (GetSymbolSize(v.value) < 15) {
       small_data.push(v);
     } else {
       top.push(v);
