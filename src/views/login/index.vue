@@ -365,7 +365,7 @@ $word_col: $dark_blue;
     position: absolute;
     top: 20%;
     //width: 400px;
-    width: 20%;
+    width: 25%;
     max-width: 100%;
     padding: 50px 35px 0;
     //margin: 10 left;
