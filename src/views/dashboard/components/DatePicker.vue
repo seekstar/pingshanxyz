@@ -2,7 +2,7 @@
   <div class="block">
     <span class="demonstration">选择日期区间：</span>
     <el-date-picker
-      v-model="dateData"
+      v-model="localData"
       type="daterange"
       align="right"
       unlink-panels
@@ -11,7 +11,7 @@
       end-placeholder="结束日期"
       :picker-options="pickerOptions2"
       :default-time="['00:00:00', '23:59:59']"
-      @change="dateChange(dateData)">
+      @change="dateChange(localData)">
       <!-- size="small"> -->
     </el-date-picker>
   </div>
@@ -109,14 +109,15 @@ function thisYear(){
 }
 
 export default {
-  props: {
-    dateData: {
-      type: Array,
-      required: true
-    }
-  },
+  // props: {
+  //   dateData: {
+  //     type: Array,
+  //     required: true
+  //   }
+  // },
   data() {
     return {
+      localData: thisDay(),
       pickerOptions2: {
         shortcuts: [{
           text: '今天',

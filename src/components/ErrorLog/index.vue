@@ -9,7 +9,7 @@
     <el-dialog :visible.sync="dialogTableVisible" width="80%" append-to-body>
       <div slot="title">
         <span style="padding-right: 10px;">紧急事件日志</span>
-        <el-button size="mini" type="primary" icon="el-icon-delete" @click="clearAll">Clear All</el-button>
+        <el-button size="mini" type="primary" icon="el-icon-delete" @click="clearAll">清空全部</el-button>
       </div>
       <el-table :data="errorLogs" border>
         <el-table-column label="事件列表">

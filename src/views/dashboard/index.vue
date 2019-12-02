@@ -44,7 +44,6 @@
         <div class="chart-wrapper">
           <el-row style="background:#fff;padding:0px 8px 0;margin-bottom:16px;">
             <date-picker
-              :date-data="date1"
               @dateChange="dateChange1"
             />
           </el-row>
@@ -693,43 +692,7 @@ export default {
       listLoading:false
     };
   },
-  beforeCreate() {
-    getDataVersion().then(resp => {
-      if(this.version != resp.data){
-        this.version = resp.data;
-        this.monthChange(this.Month);//实时更新BarChart
-        this.dateChange1(this.date1);//实时更新PieChart
-
-        //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
-        if(this.dateType == "所有时间范围"){//实时更新SunburstChart
-          this.setSunburstChartData(1, 1, 1);
-        }else if(this.dateType == "按月份选择日期"){
-          this.dateChange2(this.Month2);
-        }else{
-          this.dateChange3(this.quarter);
-        }
-
-        this.setData(this.page);//实时更新最近发生事件列表
-
-        this.monthChange3(this.Month3);//实时更新地图数据
-      }
-    });
-  },
-  beforeMount() {
-    const day = 24*60*60*1000;
-    var now = new Date();
-    now = new Date(now.getTime() - 8 * day);
-    for (var i = 0; i < 7; ++i) {
-      now = new Date(now.getTime() + day);
-      var formatted_date = now.format('yyyy-mm-dd');
-      this.pushLineChartData({
-        date: formatted_date,
-        value: getTotalNumOfEachStatus(formatted_date)
-      });
-    }
-    this.handleSetLineChartData(0);
-  },
-  mounted(){
+  created() {
     this.interval = setInterval( () => {
       getDataVersion().then(resp => {
         //console.log(resp.data)
@@ -755,7 +718,18 @@ export default {
       //console.log("定时器正在运行！！")
       //console.log(this.interval)
     }, 1000)
-    
+    const day = 24*60*60*1000;
+    var now = new Date();
+    now = new Date(now.getTime() - 8 * day);
+    for (var i = 0; i < 7; ++i) {
+      now = new Date(now.getTime() + day);
+      var formatted_date = now.format('yyyy-mm-dd');
+      this.pushLineChartData({
+        date: formatted_date,
+        value: getTotalNumOfEachStatus(formatted_date)
+      });
+    }
+    this.handleSetLineChartData(0);
   },
   beforeDestroy() {
     clearInterval(this.interval)
