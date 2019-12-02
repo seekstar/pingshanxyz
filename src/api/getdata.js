@@ -80,11 +80,11 @@ export function getSunburstChartData(op, year, date){
     }
 }
 
-export function getDetailedData(page,count){
+export function getDetailedData(page,count,state){
     return request({
         url: '/data', // 假地址 自行替换
         method: 'get',
-        params: {page,count}
+        params: {page,count,state}
     })
 }
 export function getDataCount() {

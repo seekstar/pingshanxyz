@@ -92,7 +92,7 @@ export default {
     return {
       showSeason: false,
       season: '',
-      year: new Date().getFullYear(),
+      year: 2018,
       showValue: '',
       //quarter: new Date()
     }

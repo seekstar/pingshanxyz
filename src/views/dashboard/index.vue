@@ -112,8 +112,10 @@
           :list="list"
           :page="page"
           :count="count"
+          :state="state"
           :list-loading="listLoading"
           @getData="getData"
+          @getData1="getData1"
         />
       </el-col>
 
@@ -525,6 +527,7 @@ export default {
       SunburstChartData: ChartData.status_type,
       pingShanMapData: ChartData.pingShanMapData,
       count:0,
+      state:"全部",
       lineChartXNames: [],
       lineChartDataTable: [
         //name: '碧岭街道',
@@ -710,7 +713,7 @@ export default {
             this.dateChange3(this.quarter);
           }
 
-          this.setData(this.page);//实时更新最近发生事件列表
+          this.setData(this.page,this.state);//实时更新最近发生事件列表
 
           this.monthChange3(this.Month3);//实时更新地图数据
         }
@@ -899,8 +902,8 @@ export default {
       }
       //console.log(date);
     },
-    setData(page){
-      getDetailedData(page,10).then(resp => {
+    setData(page,state){
+      getDetailedData(page,10,state).then(resp => {
         this.count=resp.data.total
         this.list = [];
         for(let i=0 ; i<resp.data.items.length ; ++i){
@@ -908,7 +911,7 @@ export default {
             time: resp.data.items[i]['统计时间'],
             position: resp.data.items[i]['所属街道'] + '  ' + resp.data.items[i]['所属社区'],
             attr: resp.data.items[i]['问题性质名称'],
-            type: resp.data.items[i]['问题类型'],
+            type: resp.data.items[i]['小类名称'],
             department: resp.data.items[i]['处置部门'],
             status: resp.data.items[i]['处置状态']
           })
@@ -918,7 +921,7 @@ export default {
     getData(page){
       this.page=page
       this.listLoading=true
-      getDetailedData(page,10).then(resp => {
+      getDetailedData(page,10,this.state).then(resp => {
         this.count=resp.data.total
         this.list = [];
         for(let i=0 ; i<resp.data.items.length ; ++i){
@@ -926,7 +929,28 @@ export default {
             time: resp.data.items[i]['统计时间'],
             position: resp.data.items[i]['所属街道'] + '  ' + resp.data.items[i]['所属社区'],
             attr: resp.data.items[i]['问题性质名称'],
-            type: resp.data.items[i]['问题类型'],
+            type: resp.data.items[i]['小类名称'],
+            department: resp.data.items[i]['处置部门'],
+            status: resp.data.items[i]['处置状态']
+          })
+          
+        }
+        this.listLoading=false
+      })
+    },
+    getData1(state){
+      this.state=state
+      this.listLoading=true
+      getDetailedData(this.page,10,state).then(resp => {
+        console.log(resp.data.total)
+        this.count=resp.data.total
+        this.list = [];
+        for(let i=0 ; i<resp.data.items.length ; ++i){
+          this.list.push({
+            time: resp.data.items[i]['统计时间'],
+            position: resp.data.items[i]['所属街道'] + '  ' + resp.data.items[i]['所属社区'],
+            attr: resp.data.items[i]['问题性质名称'],
+            type: resp.data.items[i]['小类名称'],
             department: resp.data.items[i]['处置部门'],
             status: resp.data.items[i]['处置状态']
           })
@@ -1029,4 +1053,5 @@ export default {
 .el-icon-arrow-down {
   font-size: 12px;
 }
+
 </style>

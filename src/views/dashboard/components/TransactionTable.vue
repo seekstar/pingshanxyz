@@ -1,12 +1,22 @@
 <template>
-  <div style="background: #fff;width: 100%;padding-bottom: 15px;margin-bottom:32px;">
+  <div style="background: #fff;width: 100%;padding-top: 15px;margin-bottom:32px;">
     <!-- <span class="demonstration">最近事件实时显示：</span> -->
-  
+  <span style="background:#fff;padding:16px 24px 0px;margin-bottom:32px;"> 问题性质: </span>
+      <el-select v-model="state1" placeholder="问题性质" class="filter-item"
+        @change="handleFilter">
+        <el-option label="全部" value="全部"></el-option>
+        <el-option label="处置中" value="处置中"></el-option>
+        <el-option label="超期办结" value="超期办结"></el-option>
+        <el-option label="按期办结" value="按期办结"></el-option>
+      </el-select>
     <el-table
       v-loading="listLoading"
       :data="list"
-      :stripe="true"
-      height="600"
+     
+      :row-class-name="tableRowClassName"
+      height="573">
+      
+      
     >
       <el-table-column
         label="统计时间"
@@ -64,6 +74,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <el-pagination
       layout="total, prev, pager, next, jumper"
       :page-size="10"
@@ -104,6 +115,10 @@ export default {
       type:Number,
       required: true
     },
+     state:{
+      type:String,
+      required: true
+    },
     listLoading:{
       type:Boolean,
       required: true
@@ -111,9 +126,12 @@ export default {
   },
   data() {
     return {
-      msg: ['最近十条','最近一百条', '最近五百条']
+      msg: ['最近十条','最近一百条', '最近五百条'],
+      state1:"全部"
     }
   },
+
+
   // created() {
   //   this.interval = setInterval(() => {
   //     this.setData();
@@ -123,7 +141,23 @@ export default {
     handleCurrentChange(val) {
       //this.page=val
       this.$emit('getData', Number(val));
+    },handleFilter(val){
+      this.$emit('getData1', String(val));
+    },
+    tableRowClassName({row, rowIndex}) {
+      if(row.type.indexOf("危险")>=0)
+          return 'warning-row';
+      return ' '
     }
   }
 }
 </script>
+<style>
+  .el-table .warning-row {
+    background: oldlace;
+  }
+
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+</style>
