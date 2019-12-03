@@ -733,6 +733,21 @@ export default {
       });
     }
     this.handleSetLineChartData(0);
+    this.monthChange(this.Month);//实时更新BarChart
+          this.dateChange1(this.date1);//实时更新PieChart
+
+          //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
+          if(this.dateType == "所有时间范围"){//实时更新SunburstChart
+            this.setSunburstChartData(1, 1, 1);
+          }else if(this.dateType == "按月份选择日期"){
+            this.dateChange2(this.Month2);
+          }else{
+            this.dateChange3(this.quarter);
+          }
+
+          this.setData(this.page,this.state);//实时更新最近发生事件列表
+
+          this.monthChange3(this.Month3);//实时更新地图数据
   },
   beforeDestroy() {
     clearInterval(this.interval)

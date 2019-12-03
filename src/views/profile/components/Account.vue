@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="form" :model="form" label-width="80px">
+<div><el-form ref="form" :model="form" label-width="80px">
     <el-form-item label="头像">
       <upload-avatar />
     </el-form-item>
@@ -31,13 +31,32 @@
 
     <el-form-item>
       <el-button type="primary" @click="onSubmit">提交修改</el-button>
+      <el-button type="danger" @click="showDialog=true">修改密码</el-button>
     </el-form-item>
   </el-form>
+  <el-dialog
+      title="修改密码"
+      :visible.sync="showDialog"
+    >
+<el-form>
+  <el-form-item label="密码">
+    <el-input v-model="passwordForm.password" placeholder="" show-password></el-input>
+  </el-form-item>
+  <el-form-item label="确认密码">
+    <el-input v-model="passwordForm.repassword" placeholder="" show-password></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="updatePassword">提交</el-button>
+  </el-form-item>
+  
+</el-form>
+    </el-dialog></div>
+  
 </template>
 
 <script>
 import UploadAvatar from '@/components/UploadAvatar'
-import { getInfo, updateInfo } from "@/api/user"
+import { getInfo, updateInfo,updatePassword } from "@/api/user"
 import { MessageBox, Message } from 'element-ui'
 
 
@@ -170,6 +189,8 @@ export default {
   components: { UploadAvatar },
   data() {
     return {
+      passwordForm:{password:'',repassword:''},
+      showDialog:false,
       form: {
         avatar: "",
         name: "",
@@ -186,6 +207,23 @@ export default {
     }
   },
   methods: {
+    updatePassword(){
+      if(this.passwordForm.password!=this.passwordForm.repassword){
+        Message({
+          message: "密码不一致！",
+          type: "error",
+          duration: 5 * 1000
+        });
+        return;
+      }
+      updatePassword(this.passwordForm).then(resp=>{
+        Message({
+          message: "修改成功",
+          type: "success",
+          duration: 5 * 1000
+        });
+      })
+    },
     querySearchDepartment(queryString, cb) {
       var department = allDepartment;
       var results = queryString ? department.filter(this.createFilter(queryString)) : department;

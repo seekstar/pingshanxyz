@@ -2,16 +2,25 @@
   <div style="background: #fff;width: 100%;padding-top: 15px;margin-bottom:32px;">
     <!-- <span class="demonstration">最近事件实时显示：</span> -->
   <div class="filter-container" style="text-align:center">
+     <span> 我的部门: </span>
+    <el-tag>{{department}}</el-tag>
     <span> 问题性质: </span>
       <el-select v-model="property" placeholder="问题性质" class="filter-item"
         @change="handleFilter">
-        <el-option label="全部" value=全部></el-option>
+        <el-option label="全部" value="全部"></el-option>
         <el-option label="求决" value="求决"></el-option>
         <el-option label="投诉" value="投诉"></el-option>
         <el-option label="咨询" value="咨询"></el-option>
         <el-option label="建议" value="建议"></el-option>
         <el-option label="感谢" value="感谢"></el-option>
         <el-option label="其他" value="其他"></el-option>
+      </el-select>
+      <span> 问题状态: </span>
+      <el-select v-model="status" placeholder="问题性质" class="filter-item"
+        @change="handleFilter">
+        <el-option label="处置中" value="处置中"></el-option>
+        <el-option label="按期办结" value="按期办结"></el-option>
+        <el-option label="超期办结" value="超期办结"></el-option>
       </el-select>
       <span> 排序方式: </span>
       <el-select
@@ -120,15 +129,7 @@
           {{ scope.row.source }}
         </template>
       </el-table-column>
-      <el-table-column
-        label="处理部门"
-        width="150"
-        align="center"
-      >
-        <template slot-scope="scope">
-          {{ scope.row.department }}
-        </template>
-      </el-table-column>
+    
       <el-table-column
         width="100"
         align="center"
@@ -138,6 +139,7 @@
             size="mini"
             type="primary"
             @click="handleNormal(scope.$index, scope.row)"
+            :disabled="status!='处置中'"
           >
             按期办结
           </el-button>
@@ -152,6 +154,7 @@
             size="mini"
             type="danger"
             @click="handleAbnormal(scope.$index, scope.row)"
+            :disabled="status!='处置中'"
           >
             超期办结
           </el-button>
@@ -197,9 +200,11 @@ export default {
         background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
       },
       list:[],
+      department:'',
       version:0,
       total:0,
       property:"全部",
+      status:"处置中",
       page:1,
       limit:20,
       sort:'DESC',
@@ -277,9 +282,11 @@ export default {
     ,
     getData(){
       this.listLoading = true
-      getMyData(this.page,this.limit,this.sort,this.property).then(resp => {
+      getMyData(this.page,this.limit,this.sort,this.property,this.status).then(resp => {
           this.total=resp.data.total
-          this.list=[]  
+          this.list=[]
+          if(resp.data.items.length>0)
+            this.department=resp.data.items[0]['处置部门']
           for(var i=0 ; i<resp.data.items.length ; ++i){
             this.list.push({
               id: resp.data.items[i]['主键'],
@@ -301,8 +308,10 @@ export default {
         getDataVersion().then(resp=>{
           if(this.version != resp.data){
             this.version = resp.data
-            getMyData(this.page,this.limit,this.sort,this.property).then(resp => {
+            getMyData(this.page,this.limit,this.sort,this.property,this.status).then(resp => {
+         this.total=resp.data.total
           this.list=[]  
+          this.department=resp.data.items[0]['处置部门']
           for(var i=0 ; i<resp.data.items.length ; ++i){
   
            this.list.push({

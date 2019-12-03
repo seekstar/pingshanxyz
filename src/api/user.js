@@ -36,3 +36,24 @@ export function addUser(data) {
     data
   })
 }
+export function getCode(phone) {
+  return request({
+    url: '/user/password',
+    method: 'get',
+    params:{phone}
+  })
+}
+export function resetPassword(data) {
+  return request({
+    url: '/user/password',
+    method: 'post',
+    data
+  })
+}
+export function updatePassword(data) {
+  return request({
+    url: '/user/password',
+    method: 'put',
+    data
+  })
+}

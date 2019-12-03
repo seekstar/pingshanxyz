@@ -93,11 +93,11 @@ export function getDataCount() {
         method: 'get'
     })
 }
-export function getMyData(page,count,sort,property) {
+export function getMyData(page,count,sort,property,status) {
     return request({
         url: '/user/data', // 假地址 自行替换
         method: 'get',
-        params:{page,count,sort,property}
+        params:{page,count,sort,property,status}
     })
 }
 

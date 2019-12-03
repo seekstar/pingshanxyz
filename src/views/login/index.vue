@@ -1,8 +1,37 @@
 <template>
-  <div class="login-container">
+<div class="container"> <el-dialog
+      title="Or connect with"
+      :visible.sync="showDialog"
+    >
+     <el-form  :model="passwordForm"  >
+        <el-form-item label="手机">
+    <el-input v-model="passwordForm.phone" placeholder=""></el-input>
+  </el-form-item>
+  <el-form-item label="用户名">
+    <el-input v-model="passwordForm.username" placeholder=""></el-input>
+  </el-form-item>
+  <el-form-item label="密码">
+    <el-input v-model="passwordForm.password" placeholder="" show-password></el-input>
+  </el-form-item>
+   <el-form-item label="确认密码">
+    <el-input v-model="passwordForm.repassword" placeholder=""  show-password></el-input>
+  </el-form-item>
+  <el-form-item label="验证码">
+    <el-input v-model="passwordForm.code" placeholder=""></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="updatePassword">提交</el-button>
+    <el-button  @click="getCode" :disabled="codebtn!='获取验证码'">{{codebtn}}</el-button>
+  </el-form-item>
+  
+</el-form>
+    </el-dialog>
+    
+    <div class="login-container">
     <a class="logo" href="http://www.szpsq.gov.cn/" target="_blank">
       <img class="logo-img" src="./components/坪山区人民政府.png" alt="坪山区人民政府">
     </a>
+    
     <el-form
       ref="loginForm"
       :model="loginForm"
@@ -11,9 +40,12 @@
       autocomplete="on"
       label-position="left"
     >
+       <el-button class="thirdparty-button" type="text" @click="showDialog=true">
+            找回密码
+          </el-button>
       <div class="title-container">
         <h3 class="title">
-          深圳市坪山区民生诉求数据分析系统
+          深圳市坪山区民生诉求分析系统
         </h3>
       </div>
 
@@ -73,58 +105,43 @@
         登录
       </el-button>
 
-      <!-- <div style="position:relative">
-          <div class="tips">
-            <span>Username : admin</span>
-            <span>Password : any</span>
-          </div>
-          <div class="tips">
-            <span style="margin-right:18px;">Username : editor</span>
-            <span>Password : any</span>
-          </div>
 
-          <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-            Or connect with
-          </el-button>
-        </div> -->
+
     </el-form>
 
-    <el-dialog
-      title="Or connect with"
-      :visible.sync="showDialog"
-    >
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
+   
   </div>
+    </div>
+  
 </template>
 
 <script>
-import SocialSign from './components/SocialSignin'
-import { login } from "@/api/user"
-import './components/TCaptcha.js'
 
+import { login,getCode,resetPassword } from "@/api/user"
+import './components/TCaptcha.js'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Login',
-  components: { SocialSign },
   data() {
 
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
+      callback()
     }
     return {
+      interval:null,
+      codebtn:'获取验证码',
       loginForm: {
         username: 'admin',
         password: '111111'
       },
+      passwordForm:{
+        phone:'',
+        username: '',
+        password: '',
+        repassword:'',
+        code:''
+        },
       loginRules: {
         username: [{ required: true, trigger: 'blur'}],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
@@ -163,6 +180,62 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    getCode(){
+      if(!(/^1[3456789]\d{9}$/.test(this.passwordForm.phone))){
+        Message({
+          message: "电话号码格式填写错误！",
+          type: "error",
+          duration: 5 * 1000
+        });
+        return;
+      }
+      getCode(this.passwordForm.phone).then(resp=>{
+        this.codebtn=60
+        this.interval=setInterval(()=>{
+          this.codebtn-=1
+          if(this.codebtn==0){
+            this.codebtn='获取验证码'
+clearInterval(this.interval)
+          }
+          
+
+        },1000)
+        Message({
+              message: "发送成功",
+              type: "success",
+              duration: 5 * 1000
+            });
+      }
+      )
+    },
+    updatePassword(){
+      if(this.passwordForm.password!=this.passwordForm.repassword){
+        Message({
+          message: "密码不一致！",
+          type: "error",
+          duration: 5 * 1000
+        });
+        return;
+      }
+      if(!(/^1[3456789]\d{9}$/.test(this.passwordForm.phone))){
+        Message({
+          message: "电话号码格式填写错误！",
+          type: "error",
+          duration: 5 * 1000
+        });
+        return;
+      }
+      resetPassword(this.passwordForm).then(
+        resp=>{
+        Message({
+              message: "修改成功",
+              type: "success",
+              duration: 5 * 1000
+            });
+      }
+      )
+    },
+
     checkCapslock({ shiftKey, key } = {}) {
       if (key && key.length === 1) {
         if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
@@ -355,7 +428,7 @@ $word_col: $dark_blue;
     //width: 400px;
     width: 25%;
     max-width: 100%;
-    padding: 50px 35px 0;
+    padding: 50px 35px 10px;
     //margin: 10 left;
     overflow: hidden;
     background: #fff;
@@ -406,8 +479,9 @@ $word_col: $dark_blue;
 
   .thirdparty-button {
     position: absolute;
-    right: 0;
-    bottom: 6px;
+    left: 40px;
+    bottom: 0px;
+    
   }
 
   @media only screen and (max-width: 470px) {
