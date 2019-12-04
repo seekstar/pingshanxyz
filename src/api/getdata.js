@@ -144,3 +144,16 @@ export function getTotalNumOfEachStatus(date) {
     }
     return ret;
 }
+
+
+export function getEmails(page, count) {
+    return request({
+        url: '/mail',
+        method: 'get',
+        params: {
+            'page': page,
+            'count': count
+        }
+    })
+}
+

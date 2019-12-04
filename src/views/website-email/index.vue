@@ -1,0 +1,184 @@
+<template>
+  <div>
+    <el-dialog
+      :title="dialogTitle"
+      :visible.sync="dialogVisible"
+      width="60%">
+      <span>这是一段信息</span>
+      <div v-html="html"></div>
+    </el-dialog>
+    <el-row>
+      <el-col :span="4">
+        <el-menu
+        default-active="1"
+        class="el-menu-vertical-demo"
+        @select="handleSelect">
+        <el-menu-item index="1">
+            <i class="el-icon-edit" />
+            <span slot="title">写信</span>
+        </el-menu-item>
+        <el-menu-item index="2">
+            <svg-icon icon-class="documents" />
+            <span slot="title">收件箱</span>
+        </el-menu-item>
+        <el-menu-item index="3">
+            <svg-icon icon-class="sent_email" />
+            <span slot="title">已发送</span>
+        </el-menu-item>
+        </el-menu>
+      </el-col>
+      <!-- 上内边距，右内边距，下内边距，左内边距 -->
+      <el-col :span="20" style="padding: 0px 50px 0px 50px;" v-show="this.nowId === '1'">
+        <!-- 上外边距，右外边距，下外边距，左外边距 -->
+        <MDinput style="margin: 50px 0px 40px 0px;" v-model="form.receiver" :maxlength="100" name="name" required>收件人</MDinput>
+        <MDinput style="margin: 40px 0px 40px 0px;" v-model="form.title" :maxlength="100" name="name" required>邮件标题</MDinput>
+        <Tinymce style="margin: 40px 0px 20px 0px;" v-model="form.mail" :height="600"/>
+        <el-button style="margin: 20px 0px 50px 0px;" type="primary" @click="submit">
+          <svg-icon icon-class="guide" />
+          发送
+        </el-button>
+      </el-col>
+      <!-- 上内边距，右内边距，下内边距，左内边距 -->
+      <el-col :span="20" style="padding: 0px 0px 0px 0px;" v-show="this.nowId === '2'">
+        <el-table
+          v-loading="listLoading"
+          :data="list"
+          border
+          fit
+          highlight-current-row
+          @cell-click="handleClick">
+          <el-table-column
+            label="序号"
+            min-width="40"
+            align="center"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.id }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="发送时间"
+            min-width="80"
+            align="center"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.time | timeFilter }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="发件人"
+            min-width="50"
+            align="center"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.sender }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="邮件标题"
+            min-width="200"
+            align="center"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.title }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="是否已读"
+            min-width="50"
+            align="center"
+          >
+            <template slot-scope="{row}">
+              <el-tag :type="row.status | statusFilter">
+                {{ row.status }}
+              </el-tag>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+
+<script>
+import Tinymce from "./components/Tinymce";
+import MDinput from "./components/MDinput";
+import { MessageBox, Message } from "element-ui";
+import { sendEmail } from "@/api/putdata";
+
+export default {
+  filters: {
+    statusFilter(status) {
+      if(status=='已读')
+        return 'success'
+      return 'danger'
+    },
+    timeFilter(date){
+      return date.substring(0, 10) + ' ' + date.substring(11, 19)
+    }
+  },
+  name: "editEmail",
+  components: {
+    Tinymce,
+    MDinput
+  },
+  data() {
+    return {
+      form: {
+        receiver: "",
+        title: "",
+        mail: ""
+      },
+      nowId: "1",
+      list: [{
+        id: "1",
+        time: "2019",
+        sender: "ymx",
+        title: "NMSL",
+        status: "已读",
+        mail: '<table style="border-collapse: collapse; width: 100%;" border="1"><tbody><tr><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td></tr><tr><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td></tr><tr><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td></tr><tr><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td></tr><tr><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td></tr><tr><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td></tr><tr><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td></tr><tr><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td></tr><tr><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td><td style="width: 33.3333%;">&nbsp;</td></tr></tbody></table><p><img src="https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/plugins/emoticons/img/smiley-frown.gif" alt="frown" /></p><p><strong><span style="background-color: #00ff00;">as<span style="text-decoration: underline;">dsadadsas</span></span></strong></p><p><span style="text-decoration: underline;"><strong><span style="background-color: #00ff00;">wefqwef<sup>222222</sup></span></strong></span></p><p><span style="text-decoration: underline;"><strong><span style="background-color: #00ff00;">asdfsa</span></strong></span></p><p>&nbsp;</p><ol><li><span style="text-decoration: underline;">sadf</span></li><li><span style="text-decoration: underline;">sadf</span></li><li><span style="text-decoration: underline;">sadf</span></li><li><span style="text-decoration: underline;">asdf</span></li></ol><ul><li><span style="text-decoration: underline;">aaa</span></li><li><span style="text-decoration: underline;">bbb</span></li><li>ccc</li></ul><p>03:54:55</p><p>&nbsp;</p><p><img src="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike272%2C5%2C5%2C272%2C90/sign=16445316a764034f1bc0ca54ceaa1254/dbb44aed2e738bd4eea32ffaad8b87d6267ff97f.jpg" alt="超大图片" width="2480" height="1299" /></p><p>&nbsp;</p><p>&nbsp;</p>'
+      }],
+      dialogVisible: false,
+      html: "",
+      dialogTitle: "",
+      listLoading: false
+    };
+  },
+  methods: {
+    handleClick(row, column, cell, event){
+      this.dialogTitle = "来自"+row.sender+"的信件";
+      this.html = row.mail;
+      this.dialogVisible = true;
+      //console.log(row);
+    },
+    handleSelect(index, indexPath){
+      this.nowId = index;
+    },
+    submit(){
+      console.log(this.form.mail)
+      if(this.form.receiver.trim() == ""){
+        Message({
+          message: "收件人不能为空！",
+          type: "error",
+          duration: 5 * 1000
+        });
+        return;
+      }
+      if(this.form.title.trim() == ""){
+        Message({
+          message: "邮件标题不能为空！",
+          type: "error",
+          duration: 5 * 1000
+        });
+        return;
+      }
+      sendEmail(form).then(resp => {
+
+      }).catch(error => {
+
+      })
+    }
+  }
+};
+</script>
+

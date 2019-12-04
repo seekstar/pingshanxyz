@@ -190,7 +190,8 @@ import {
   getMapData,
   getDataVersion,
   //getDataCount,
-  getTotalNumOfEachStatus
+  getTotalNumOfEachStatus,
+  getEmails //debug用
 } from "@/api/getdata";
 
 //require("./lib/date.format");
@@ -696,6 +697,9 @@ export default {
     };
   },
   created() {
+    getEmails(1, 30).then(resp => {
+      console.log(resp.data)
+    })
     /* 初始化数据 */
     getDataVersion().then(resp => {
       if(this.dataVersion != resp.data){
@@ -773,7 +777,6 @@ export default {
     },
     setBarChartData(year, month) {
       getBarChartData(year, month).then(resp => {
-        //console.log(resp.data);
         var tmp = {
           title: "各街道民生事件情况",
           street: [

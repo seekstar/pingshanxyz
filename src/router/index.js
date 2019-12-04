@@ -92,7 +92,20 @@ export const constantRoutes = [
         meta: { title: '个人账户', icon: 'user', noCache: true }
       }
     ]
-  }
+  },
+  {
+    path: '/website-email',
+    component: Layout,
+    redirect: '/website-email/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/website-email/index'),
+        name: 'WebsiteEmail',
+        meta: { title: '站内信', icon: 'email', affix: true }
+      }
+    ]
+  },
 ]
 
 /**
