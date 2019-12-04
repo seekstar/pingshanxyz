@@ -696,15 +696,36 @@ export default {
     };
   },
   created() {
+    /* 初始化数据 */
+    getDataVersion().then(resp => {
+      if(this.dataVersion != resp.data){
+        this.dataVersion = resp.data;
+        this.monthChange(this.Month);//实时更新BarChart
+        this.dateChange1(this.date1);//实时更新PieChart
+
+        if(this.dateType == "所有时间范围"){//实时更新SunburstChart
+          this.setSunburstChartData(1, 1, 1);
+        }else if(this.dateType == "按月份选择日期"){
+          this.dateChange2(this.Month2);
+        }else{
+          this.dateChange3(this.quarter);
+        }
+
+        this.setData(this.page,this.state);//实时更新最近发生事件列表
+
+        this.monthChange3(this.Month3);//实时更新地图数据
+      }
+    })
+
+    /* 设置定时器，每隔一秒钟更新一次数据 */
     this.interval = setInterval( () => {
       getDataVersion().then(resp => {
         //console.log(resp.data)
-        if(this.version != resp.data){
-          this.version = resp.data;
+        if(this.dataVersion != resp.data){
+          this.dataVersion = resp.data;
           this.monthChange(this.Month);//实时更新BarChart
           this.dateChange1(this.date1);//实时更新PieChart
 
-          //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
           if(this.dateType == "所有时间范围"){//实时更新SunburstChart
             this.setSunburstChartData(1, 1, 1);
           }else if(this.dateType == "按月份选择日期"){
@@ -721,6 +742,8 @@ export default {
       //console.log("定时器正在运行！！")
       //console.log(this.interval)
     }, 1000)
+
+    /* 初始化折线图，现在该功能已被删除 */
     const day = 24*60*60*1000;
     var now = new Date();
     now = new Date(now.getTime() - 8 * day);
@@ -733,21 +756,6 @@ export default {
       });
     }
     this.handleSetLineChartData(0);
-    this.monthChange(this.Month);//实时更新BarChart
-          this.dateChange1(this.date1);//实时更新PieChart
-
-          //TODO: 每次更新数据的时候SunburstChart也会更新，导致不能观察数据
-          if(this.dateType == "所有时间范围"){//实时更新SunburstChart
-            this.setSunburstChartData(1, 1, 1);
-          }else if(this.dateType == "按月份选择日期"){
-            this.dateChange2(this.Month2);
-          }else{
-            this.dateChange3(this.quarter);
-          }
-
-          this.setData(this.page,this.state);//实时更新最近发生事件列表
-
-          this.monthChange3(this.Month3);//实时更新地图数据
   },
   beforeDestroy() {
     clearInterval(this.interval)
@@ -898,6 +906,8 @@ export default {
         this.dateType = "按月份选择日期";
         this.show2 = true;
         this.show3 = false;
+        /* 更新图表数据 */
+        this.dateChange2(this.Month2);
       } else {
         this.dateType = "按季度选择日期";
         this.show2 = false;
