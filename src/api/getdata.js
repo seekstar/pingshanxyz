@@ -234,3 +234,14 @@ export function getEmails(page, count) {
         }
     })
 }
+export function getEmailHistory(page, count) {
+    return request({
+        url: '/mail/history',
+        method: 'get',
+        params: {
+            'page': page,
+            'count': count
+        }
+    })
+}
+

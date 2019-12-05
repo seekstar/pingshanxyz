@@ -19,11 +19,7 @@ export function sendEmail(form) {
   return request({
     url: '/mail',
     method: 'post',
-    data: {
-      receivers: [form.receiver],
-      title: form.title,
-      mail: form.mail
-    }
+    data: form
   })
 }
 
