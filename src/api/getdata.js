@@ -244,4 +244,10 @@ export function getEmailHistory(page, count) {
         }
     })
 }
+export function getEmailVersion() {
+    return request({
+        url: '/mail/version',
+        method: 'get',
 
+    })
+}

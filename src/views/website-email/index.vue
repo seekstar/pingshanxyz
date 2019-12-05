@@ -172,7 +172,7 @@ import Tinymce from "./components/Tinymce";
 import MDinput from "./components/MDinput";
 import { MessageBox, Message } from "element-ui";
 import { sendEmail, changeIsread } from "@/api/putdata";
-import { getEmails,getEmailHistory } from "@/api/getdata";
+import { getEmails,getEmailHistory,getEmailVersion } from "@/api/getdata";
 
 export default {
   filters: {
@@ -214,6 +214,7 @@ export default {
       listLoading: true,
       total: 20,
       nowpage: 1,
+      version:0,
       /* 发件箱相关数据 */
       list2: [{
         id: "1",
@@ -247,7 +248,10 @@ export default {
     })
 
     this.interval = setInterval(() => {
-      getEmails(this.nowpage, 20).then(resp => {
+      getEmailVersion().then(resp=>{
+        if(resp.data!=this.version){
+          this.version=resp.data
+        getEmails(this.nowpage, 20).then(resp => {
         this.list = resp.data.items;
         this.total = resp.data.total;
       })
@@ -255,6 +259,10 @@ export default {
         this.list2 = resp.data.items;
         this.total2 = resp.data.total;
       })
+        }
+        
+      }
+      )
     }, 1000)
   },
   beforeDestroy() {
