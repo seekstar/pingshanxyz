@@ -157,6 +157,8 @@ function shallow_copy_array(arr) {
     return ret;
 }
 
+export const street_name = ['碧岭街道', '龙田街道', '马峦街道', '石井街道', '坪山街道', '坑梓街道'];
+
 //得到从from开始的7天的数据（每个街道的每个类别的事件的数目）
 //from 形如 2018-10-30
 export function getTotalNumOfEachTypes(from) {
@@ -167,12 +169,11 @@ export function getTotalNumOfEachTypes(from) {
             'from': from,
         }
     })*/
-    var ori_street = ['碧岭街道', '龙田街道', '马峦街道', '石井街道', '坪山街道', '坑梓街道'];
     var ori_type = ['求决', '投诉', '咨询', '建议', '感谢', '其他'];
-    var street_num = ori_street.length;
+    var street_num = street_name.length;
     var type_num = ori_type.length;
 
-    var now_street = shallow_copy_array(ori_street);
+    var now_street = shallow_copy_array(street_name);
     shuffle(now_street);
     var now_type = shallow_copy_array(ori_type);
     shuffle(now_type);
@@ -199,7 +200,7 @@ export function getTotalNumOfEachTypes(from) {
     // console.log("random given data:");
     // console.log(ans);
 
-    var index_of_street = gen_index_of(ori_street);
+    var index_of_street = gen_index_of(street_name);
     var index_of_type = gen_index_of(ori_type);
     //console.log(index_of_street);
     //console.log(index_of_type);
