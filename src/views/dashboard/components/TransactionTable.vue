@@ -115,7 +115,7 @@ export default {
       type:Number,
       required: true
     },
-     state:{
+    state:{
       type:String,
       required: true
     },
@@ -126,7 +126,6 @@ export default {
   },
   data() {
     return {
-      msg: ['最近十条','最近一百条', '最近五百条'],
       state1:"全部"
     }
   },

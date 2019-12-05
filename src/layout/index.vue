@@ -108,7 +108,7 @@ export default {
                   });
                   this.nowErrorLog = this.nowErrorLog.slice(1);
                 }
-              }, 5000)
+              }, 500)
             }
           }
         }

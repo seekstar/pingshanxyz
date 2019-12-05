@@ -102,7 +102,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/website-email/index'),
         name: 'WebsiteEmail',
-        meta: { title: '站内信', icon: 'email', affix: true }
+        meta: { title: '站内信', icon: 'email', noCache: true }
       }
     ]
   },
