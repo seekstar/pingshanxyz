@@ -126,6 +126,26 @@ export function getMapData(year, month){
     }
 }
 
+export function getMapData_detail(year, month) {
+    var ret;
+    if (year < 0) {
+        ret = request({
+            url: '/statistics/detail', // 假地址 自行替换
+            method: 'get'
+        })
+    } else {
+        ret = request({
+            url: '/statistics/detail', // 假地址 自行替换
+            method: 'get',
+            params: {
+                'year': year,
+                'month': month
+            }
+        })
+    }
+    return ret;
+}
+
 export function getDataVersion(){
     return request({
         url: '/data/version',

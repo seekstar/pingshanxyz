@@ -200,6 +200,7 @@ import {
   getSunburstChartData,
   getDetailedData,
   getMapData,
+  getMapData_detail,
   getDataVersion,
   //getDataCount,
   getTotalNumOfEachTypes,
