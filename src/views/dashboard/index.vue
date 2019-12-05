@@ -8,11 +8,23 @@
       <github-corner class="github-corner" />
     </el-tooltip>
 
-    <!-- <panel-group @handleSetLineChartData="handleSetLineChartData" />
-
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
-    </el-row> -->
+    <!-- LineChart -->
+    <el-row style="background:#fff;padding:16px 16px 0;">
+      <el-col
+        :xs="40"
+        :sm="40"
+        :lg="21"
+      >
+        <line-chart :chart-data="lineChartData" />
+      </el-col>
+      <el-col
+        :xs="8"
+        :sm="8"
+        :lg="3"
+      >
+        <panel-group @handleSetLineChartData="handleSetLineChartData" />
+      </el-col>
+    </el-row>
 
     <!-- BarChart -->
     <el-row class="chart-wrapper">
@@ -190,7 +202,7 @@ import {
   getMapData,
   getDataVersion,
   //getDataCount,
-  getTotalNumOfEachStatus,
+  getTotalNumOfEachTypes,
   getEmails //debug用
 } from "@/api/getdata";
 
@@ -696,6 +708,11 @@ export default {
       listLoading:false
     };
   },
+  beforeMount() {
+    //初始化曲线图数据
+    this.updateLineChartData();
+    this.handleSetLineChartData(0);
+  },
   created() {
     getEmails(1, 30).then(resp => {
       console.log(resp.data)
@@ -718,6 +735,10 @@ export default {
         this.setData(this.page,this.state);//实时更新最近发生事件列表
 
         this.monthChange3(this.Month3);//实时更新地图数据
+
+        // //初始化曲线图数据
+        // this.updateLineChartData();
+        // this.handleSetLineChartData(0);
       }
     })
 
@@ -741,25 +762,13 @@ export default {
           this.setData(this.page,this.state);//实时更新最近发生事件列表
 
           this.monthChange3(this.Month3);//实时更新地图数据
+
+          this.updateLineChartData(); //实时更新曲线图数据
         }
       })
       //console.log("定时器正在运行！！")
       //console.log(this.interval)
     }, 1000)
-
-    /* 初始化折线图，现在该功能已被删除 */
-    const day = 24*60*60*1000;
-    var now = new Date();
-    now = new Date(now.getTime() - 8 * day);
-    for (var i = 0; i < 7; ++i) {
-      now = new Date(now.getTime() + day);
-      var formatted_date = now.format('yyyy-mm-dd');
-      this.pushLineChartData({
-        date: formatted_date,
-        value: getTotalNumOfEachStatus(formatted_date)
-      });
-    }
-    this.handleSetLineChartData(0);
   },
   beforeDestroy() {
     clearInterval(this.interval)
@@ -1019,6 +1028,35 @@ export default {
       //console.log(date);
     },
 
+    clearLineChartData() {
+      this.lineChartXNames = [];
+      for (var i = 0; i < this.lineChartDataTable.length; ++i) {
+        for (var j = 0; j < this.lineChartDataTable[i].length; ++j) {
+          this.lineChartDataTable[i][j].data = [];
+        }
+      }
+    },
+    updateLineChartData() {
+      this.clearLineChartData();
+
+      const day = 24*60*60*1000;
+      var now = new Date();
+      var today = new Date("2018/10/30");
+      today = today.getTime()
+      now = new Date((now.getTime() - today) % day + today - 6 * day);
+      
+      var formatted_date = now.format('yyyy-mm-dd');
+      var data = getTotalNumOfEachTypes(formatted_date);
+      for (var i = 0; i < 7; ++i) {
+        this.pushLineChartData({
+          date: formatted_date,
+          value: data[i]
+        });
+
+        now = new Date(now.getTime() + day);
+        formatted_date = now.format('yyyy-mm-dd');
+      }
+    },
     pushLineChartData(new_day) {
       this.lineChartXNames.push(new_day.date);
       for (var i = 0; i < new_day.value.length; ++i) {
@@ -1027,7 +1065,7 @@ export default {
         }
       }
     },
-    shiftLineChartData() {
+    /*shiftLineChartData() {
       this.lineChartXNames.shift();
       for (var i = 0; i < this.lineChartDataTable.length; ++i) {
         for (var j = 0; j < this.lineChartDataTable[i].length; ++j) {
@@ -1039,7 +1077,7 @@ export default {
       this.pushLineChartData(new_day);
       this.shiftLineChartData();
       this.handleSetLineChartData(this.lastLineChartType);  //refresh
-    }
+    }*/
   }
 };
 </script>
