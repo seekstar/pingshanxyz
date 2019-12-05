@@ -133,96 +133,17 @@ export function getDataVersion(){
     })
 }
 
-function shuffle(arr) {
-    let i = arr.length;
-    while (i) {
-        let j = Math.floor(Math.random() * i--);
-        [arr[j], arr[i]] = [arr[i], arr[j]];
-    }
-}
-
-function gen_index_of(arr) {
-    var index_of = {};
-    for (let i = 0; i < arr.length; ++i) {
-        index_of[arr[i]] = i;
-    }
-    return index_of;
-}
-
-function shallow_copy_array(arr) {
-    var ret = [];
-    for (let v of arr) {
-        ret.push(v);
-    }
-    return ret;
-}
-
-export const street_name = ['碧岭街道', '龙田街道', '马峦街道', '石井街道', '坪山街道', '坑梓街道'];
-
 //得到从from开始的7天的数据（每个街道的每个类别的事件的数目）
 //from 形如 2018-10-30
 export function getTotalNumOfEachTypes(from) {
-    /*return request({
-        url:
+    return request({
+        url: '/statistics/week',
         method: 'get',
         params: {
             'from': from,
         }
-    })*/
-    var ori_type = ['求决', '投诉', '咨询', '建议', '感谢', '其他'];
-    var street_num = street_name.length;
-    var type_num = ori_type.length;
-
-    var now_street = shallow_copy_array(street_name);
-    shuffle(now_street);
-    var now_type = shallow_copy_array(ori_type);
-    shuffle(now_type);
-    // console.log(now_street);
-    // console.log(now_type);
-    var ans = [];
-    for (let day = 0; day < 7; ++day) {
-        let ret = [];
-        for (let i = 0; i < 6; ++i) {   //街道
-            let tmp = [];
-            for (let j = 0; j < 6; ++j) {   //类别（求决、投诉等）
-                tmp.push({
-                    name: now_type[j],
-                    value: Math.random() * 100  //事件数目
-                });
-            }
-            ret.push({
-                name: now_street[i],
-                value: tmp
-            });
-        }
-        ans.push(ret);
-    }
-    // console.log("random given data:");
-    // console.log(ans);
-
-    var index_of_street = gen_index_of(street_name);
-    var index_of_type = gen_index_of(ori_type);
-    //console.log(index_of_street);
-    //console.log(index_of_type);
-
-    var clean_data = [];
-    for (let given_day_data of ans) {
-        let street_data = new Array(street_num);
-        for (let given_street_data of given_day_data) {   //街道
-            let to = index_of_street[given_street_data.name];
-            //console.log("For street name " + given_street_data.name + ", to = " + to);
-            street_data[to] = new Array(type_num);
-            for (let given_type_data of given_street_data.value) {   //类别（求决、投诉等）
-                street_data[to][index_of_type[given_type_data.name]] = given_type_data.value;
-            }
-        }
-        clean_data.push(street_data);
-    }
-    //console.log(clean_data);
-
-    return clean_data;
+    });
 }
-
 
 export function getEmails(page, count) {
     return request({

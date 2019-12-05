@@ -202,13 +202,13 @@ import {
   getMapData,
   getDataVersion,
   //getDataCount,
-  street_name,
   getTotalNumOfEachTypes,
   getEmails //debug用
 } from "@/api/getdata";
 
 //require("./lib/date.format");
 import "./components/lib/date.format";
+import { gen_index_of } from "./components/lib/my_lib";
 
 function getNowDate() {
   //将当前时间初始化为2018-10-30 + 当前时间
@@ -232,6 +232,13 @@ function thisDay(){
   end.setDate(end.getDate() + 1);
   return [start, end];
 }
+
+const street_name = ['碧岭街道', '龙田街道', '马峦街道', '石井街道', '坪山街道', '坑梓街道'];
+const type_name = ['求决', '投诉', '咨询', '建议', '感谢', '其他'];
+const street_num = street_name.length;
+const type_num = type_name.length;
+const index_of_street = gen_index_of(street_name);
+const index_of_type = gen_index_of(type_name);
 
 const ChartData = {
   types_street: {
@@ -1043,21 +1050,35 @@ export default {
 
       const day = 24*60*60*1000;
       var now = new Date();
+      //假装今天是2018/10/30
       var today = new Date("2018/10/30");
       today = today.getTime()
       now = new Date((now.getTime() - today) % day + today - 6 * day);
       
       var formatted_date = now.format('yyyy-mm-dd');
-      var data = getTotalNumOfEachTypes(formatted_date);
-      for (var i = 0; i < 7; ++i) {
-        this.pushLineChartData({
-          date: formatted_date,
-          value: data[i]
-        });
 
-        now = new Date(now.getTime() + day);
-        formatted_date = now.format('yyyy-mm-dd');
-      }
+      getTotalNumOfEachTypes(formatted_date).then(resp => {
+        resp = resp.data;
+
+        var data = [];
+        for (let given_date in resp) {
+          let day_data = [];
+          for (let i = 0; i < street_num; ++i) {
+              day_data.push(new Array(type_num).fill(0));
+          }
+          for (let rec of resp[given_date]) {
+              day_data[index_of_street[rec.street]][index_of_type[rec.name]] += rec.value;
+          }
+          data.push({
+            date: given_date, 
+            value: day_data
+          });
+        }
+
+        for (var i = 0; i < 7; ++i) {
+          this.pushLineChartData(data[i]);
+        }
+      });
     },
     pushLineChartData(new_day) {
       this.lineChartXNames.push(new_day.date);
@@ -1067,19 +1088,6 @@ export default {
         }
       }
     },
-    /*shiftLineChartData() {
-      this.lineChartXNames.shift();
-      for (var i = 0; i < this.lineChartDataTable.length; ++i) {
-        for (var j = 0; j < this.lineChartDataTable[i].length; ++j) {
-          this.lineChartDataTable[i][j].data.shift();
-        }
-      }
-    },
-    UpdateLineChartData(new_day) {
-      this.pushLineChartData(new_day);
-      this.shiftLineChartData();
-      this.handleSetLineChartData(this.lastLineChartType);  //refresh
-    }*/
   }
 };
 </script>
