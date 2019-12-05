@@ -174,8 +174,16 @@ export default {
         tooltip: {
           trigger: "item",
           formatter: function(params) {
-            return params.name.slice(0, 2) + " " + params.value[2];
-          }
+            var res = params.name.slice(0, 2) + "<br>";
+            res += "总数：" + params.value[2] + "<br>";
+            var detail = params.data.detail;
+            for (let type in detail) {
+              if (detail[type]) {
+                res += type + ": " + detail[type] + "<br>";
+              }
+            }
+            return res;
+          },
         },
         bmap: {
           center: GetCenter(data.boundary),

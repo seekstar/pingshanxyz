@@ -108,24 +108,6 @@ export function getAbnormalData(){
     })
 }
 
-export function getMapData(year, month){
-    if(year<0){
-        return request({
-            url: '/statistics/community', // 假地址 自行替换
-            method: 'get',
-        })
-    }else{
-        return request({
-            url: '/statistics/community', // 假地址 自行替换
-            method: 'get',
-            params: {
-                'year': year,
-                'month': month
-            }
-        })
-    }
-}
-
 export function getMapData_detail(year, month) {
     var ret;
     if (year < 0) {
@@ -145,6 +127,31 @@ export function getMapData_detail(year, month) {
     }
     return ret;
 }
+
+export function getMapData_total(year, month){
+    var ret;
+    if(year<0){
+        ret = request({
+            url: '/statistics/community', // 假地址 自行替换
+            method: 'get',
+        })
+    }else{
+        ret = request({
+            url: '/statistics/community', // 假地址 自行替换
+            method: 'get',
+            params: {
+                'year': year,
+                'month': month
+            }
+        })
+    }
+    return ret;
+}
+
+/*export function getMapData(year, month) {
+    getMapData_detail(year, month);
+    return getMapData_total(year, month);
+}*/
 
 export function getDataVersion(){
     return request({

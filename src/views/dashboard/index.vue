@@ -178,7 +178,7 @@ import {
   getBarChartData,
   getSunburstChartData,
   getDetailedData,
-  getMapData,
+  getMapData_total,
   getMapData_detail,
   getDataVersion,
   //getDataCount,
@@ -215,10 +215,13 @@ function thisDay(){
 
 const street_name = ['碧岭街道', '龙田街道', '马峦街道', '石井街道', '坪山街道', '坑梓街道'];
 const type_name = ['求决', '投诉', '咨询', '建议', '感谢', '其他'];
+const community_name = ["马峦社区", "金龟社区", "汤坑社区", "江岭社区", "坪环社区", "坪山社区", "沙坣社区", "六联社区", "田头社区", "碧岭社区", "沙湖社区", "田心社区", "六和社区", "竹坑社区", "老坑社区", "坑梓社区", "和平社区", "石井社区", "南布社区", "金沙社区", "龙田社区", "沙田社区", "秀新社区"];
 const street_num = street_name.length;
 const type_num = type_name.length;
+const community_num = community_name.length;
 const index_of_street = gen_index_of(street_name);
 const index_of_type = gen_index_of(type_name);
+const index_of_community = gen_index_of(community_name);
 
 const ChartData = {
   types_street: {
@@ -341,29 +344,29 @@ const ChartData = {
     choose_env: 'light_env',
     zoom: 12,
     data: [
-      {name: '马峦社区', value: [114.3382030000,22.6445380000,0]},
-      {name: '金龟社区', value: [114.4064610000,22.6637440000,0]},
-      {name: '汤坑社区', value: [114.3310790000,22.6788050000,0]},
-      {name: '江岭社区', value: [114.3625960000,22.6920200000,0]},
-      {name: '坪环社区', value: [114.3547400000,22.6880960000,0]},
-      {name: '坪山社区', value: [114.3572650000,22.6962590000,0]},
-      {name: '沙坣社区', value: [114.3774770000,22.6901530000,0]},
-      {name: '六联社区', value: [114.3435272387,22.6896070615,0]},
-      {name: '田头社区', value: [114.4108370000,22.6971970000,0]},
-      {name: '碧岭社区', value: [114.2956630000,22.6734200000,0]},
-      {name: '沙湖社区', value: [114.3265520000,22.6790900000,0]},
-      {name: '田心社区', value: [114.4219430000,22.7003510000,0]},
-      {name: '六和社区', value: [114.3499140000,22.7079190000,0]},
-      {name: '竹坑社区', value: [114.3950740000,22.7157730000,0]},
-      {name: '老坑社区', value: [114.3693120000,22.7348660000,0]},
-      {name: '坑梓社区', value: [114.3900130000,22.7530310000,0]},
-      {name: '和平社区', value: [114.3504321337,22.6947184506,0]},
-      {name: '石井社区', value: [114.3909780000,22.6976250000,0]},
-      {name: '南布社区', value: [114.3756070000,22.7053400000,0]},
-      {name: '金沙社区', value: [114.4040810000,22.7586770000,0]},
-      {name: '龙田社区', value: [114.3728410000,22.7533460000,0]},
-      {name: '沙田社区', value: [114.4044440000,22.7617640000,0]},
-      {name: '秀新社区', value: [114.3812230000,22.7468730000,0]}
+      {name: '马峦社区', value: [114.3382030000,22.6445380000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '金龟社区', value: [114.4064610000,22.6637440000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '汤坑社区', value: [114.3310790000,22.6788050000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '江岭社区', value: [114.3625960000,22.6920200000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '坪环社区', value: [114.3547400000,22.6880960000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '坪山社区', value: [114.3572650000,22.6962590000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '沙坣社区', value: [114.3774770000,22.6901530000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '六联社区', value: [114.3435272387,22.6896070615,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '田头社区', value: [114.4108370000,22.6971970000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '碧岭社区', value: [114.2956630000,22.6734200000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '沙湖社区', value: [114.3265520000,22.6790900000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '田心社区', value: [114.4219430000,22.7003510000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '六和社区', value: [114.3499140000,22.7079190000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '竹坑社区', value: [114.3950740000,22.7157730000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '老坑社区', value: [114.3693120000,22.7348660000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '坑梓社区', value: [114.3900130000,22.7530310000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '和平社区', value: [114.3504321337,22.6947184506,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '石井社区', value: [114.3909780000,22.6976250000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '南布社区', value: [114.3756070000,22.7053400000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '金沙社区', value: [114.4040810000,22.7586770000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '龙田社区', value: [114.3728410000,22.7533460000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '沙田社区', value: [114.4044440000,22.7617640000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}},
+      {name: '秀新社区', value: [114.3812230000,22.7468730000,0], detail: {'求决': 0, '投诉': 0, '咨询': 0, '建议': 0, '感谢': 0, '其他': 0}}
     ],
     boundary: [
       [114.452581, 22.697309],
@@ -987,21 +990,30 @@ export default {
       })
     },
     setMapData(year, month){
-      getMapData(year, month).then(resp => {
+      Promise.all([getMapData_total(year, month), getMapData_detail(year, month)]).then(resp => {
+        var total = resp[0].data;
+        var detail = resp[1].data;
+
         var tmp = JSON.parse(JSON.stringify(ChartData.pingShanMapData));
-        for(let i = 0 ; i<tmp.data.length ; ++i)
+        for(let i = 0 ; i<tmp.data.length ; ++i) {
           tmp.data[i].value[2] = 0;
-        for(let item of resp.data){
-          for(let i = 0 ; i<tmp.data.length ; ++i){
-            if(tmp.data[i].name == item.name){
-              tmp.data[i].value[2] = item.value;
-            }
+        }
+
+        for (let rec of total) {
+          if (tmp.data[index_of_community[rec.name]] === undefined) {
+            continue;
           }
+          tmp.data[index_of_community[rec.name]].value[2] = rec.value;
+        }
+        for (let rec of detail) {
+          if (tmp.data[index_of_community[rec.community]] === undefined) {
+            continue;
+          }
+          tmp.data[index_of_community[rec.community]].detail[rec.name] = rec.value;
         }
         if(JSON.stringify(this.pingShanMapData) !== JSON.stringify(tmp)){
           this.pingShanMapData = tmp;
         }
-        //console.log(this.pingShanMapData)
       })
     },
     monthChange3(date){
