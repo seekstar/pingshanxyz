@@ -85,6 +85,9 @@ export default {
     },
     setOptions(data) {
       this.chart.setOption({
+        title: {
+            text: data.title,
+        },
         xAxis: {
           data: data.xnames,
           boundaryGap: false,

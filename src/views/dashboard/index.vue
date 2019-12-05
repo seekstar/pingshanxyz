@@ -202,6 +202,7 @@ import {
   getMapData,
   getDataVersion,
   //getDataCount,
+  street_name,
   getTotalNumOfEachTypes,
   getEmails //debug用
 } from "@/api/getdata";
@@ -889,6 +890,7 @@ export default {
     handleSetLineChartData(type) {
       this.lastLineChartType = type;
       var new_data = {
+        title: street_name[type] + "近7天各事件类型数量走势",
         xnames: this.lineChartXNames,
         data: this.lineChartDataTable[type]
       };
