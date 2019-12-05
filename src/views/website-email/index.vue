@@ -168,7 +168,7 @@ import Tinymce from "./components/Tinymce";
 import MDinput from "./components/MDinput";
 import { MessageBox, Message } from "element-ui";
 import { sendEmail, changeIsread } from "@/api/putdata";
-import { getEmails } from "@/api/getdata";
+import { getEmails,getEmailHistory } from "@/api/getdata";
 
 export default {
   filters: {
@@ -224,6 +224,12 @@ export default {
       this.listLoading = false;
       //console.log(resp.data)
     })
+    getEmailHistory(1,20).then(resp => {
+      this.list2 = resp.data.items;
+      this.total2 = resp.data.total;
+      this.listLoading = false;
+      //console.log(resp.data)
+    })
   },
   methods: {
     submit(){
@@ -244,8 +250,12 @@ export default {
         });
         return;
       }
-      sendEmail(form).then(resp => {
-
+      sendEmail(this.form).then(resp => {
+        Message({
+          message: "发送成功",
+          type: "success",
+          duration: 1000
+        });
       }).catch(error => {
 
       })
