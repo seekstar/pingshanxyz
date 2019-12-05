@@ -67,7 +67,9 @@ export default {
     chartData: {
       deep: true,
       handler(val) {
-        this.setOptions(val)
+        //if (val != null) { //not null nor undefined
+          this.setOptions(val)
+        //}
       }
     }
   },
@@ -89,11 +91,7 @@ export default {
       //this.setOptions(this.chartData)
     },
     setOptions(data) {
-      //console.log(the_same(data, last_data));
       if (!the_same(data, last_data)) {
-        //console.log(JSON.stringify(data));
-        //console.log(JSON.stringify(last_data));
-        
         last_data = JSON.parse(JSON.stringify(data));
         this.chart.setOption({
           title: {

@@ -188,7 +188,7 @@ import {
 
 //require("./lib/date.format");
 import "./components/lib/date.format";
-import { gen_index_of } from "./components/lib/my_lib";
+import { gen_index_of, deep_copy } from "./components/lib/my_lib";
 
 function getNowDate() {
   //将当前时间初始化为2018-10-30 + 当前时间
@@ -235,110 +235,11 @@ const ChartData = {
       "坑梓街道",
       "-"
     ],
-    type: [
-      // {
-      //   name: "安全隐患",
-      //   data: [0, 0, 0, 0, 1, 0]
-      // },
-      // {
-      //   name: "文体旅游",
-      //   data: [0, 0, 0, 0, 1, 0]
-      // },
-      // {
-      //   name: "教育卫生",
-      //   data: [0, 1, 0, 0, 2, 0]
-      // },
-      // {
-      //   name: "组织人事",
-      //   data: [0, 0, 0, 0, 0, 0]
-      // },
-      // {
-      //   name: "党建群团",
-      //   data: [0, 0, 0, 0, 0, 0]
-      // },
-      // {
-      //   name: "党纪政纪",
-      //   data: [0, 0, 0, 0, 0, 0]
-      // },
-      // {
-      //   name: "民政服务",
-      //   data: [0, 0, 0, 0, 0, 0]
-      // },
-      // {
-      //   name: "统一战线",
-      //   data: [0, 1, 0, 0, 0, 0]
-      // },
-      // {
-      //   name: "社区管理",
-      //   data: [0, 2, 0, 0, 0, 0]
-      // },
-      // {
-      //   name: "治安维稳",
-      //   data: [0, 0, 0, 0, 0, 0]
-      // },
-      // {
-      //   name: "环保水务",
-      //   data: [4, 15, 4, 1, 9, 3]
-      // },
-      // {
-      //   name: "规土城建",
-      //   data: [0, 1, 0, 0, 1, 0]
-      // },
-      // {
-      //   name: "市容环卫",
-      //   data: [1, 4, 2, 0, 13, 8]
-      // },
-      // {
-      //   name: "市政设施",
-      //   data: [1, 7, 1, 0, 5, 3]
-      // },
-      // {
-      //   name: "专业事件采集",
-      //   data: [0, 0, 0, 0, 0, 0]
-      // },
-      // {
-      //   name: "交通运输",
-      //   data: [0, 12, 0, 0, 0, 1]
-      // },
-      // {
-      //   name: "劳动社保",
-      //   data: [0, 0, 0, 2, 1, 0]
-      // },
-      // {
-      //   name: "食药市监",
-      //   data: [1, 1, 0, 0, 0, 0]
-      // }
-    ]
+    type: []
   },
   properties: {
     title: "民生诉求分析",
-    //types: ['求决', '投诉', '咨询', "建议", '感谢', '其他'],
-    properties: [
-      // {
-      //   name: "求决",
-      //   value: 30
-      // },
-      // {
-      //   name: "投诉",
-      //   value: 6328
-      // },
-      // {
-      //   name: "咨询",
-      //   value: 308
-      // },
-      // {
-      //   name: "建议",
-      //   value: 118
-      // },
-      // {
-      //   name: "感谢",
-      //   value: 10
-      // },
-      // {
-      //   name: "其他",
-      //   value: 1
-      // }
-    ]
+    properties: []
   },
   pingShanMapData: {
     choose_env: 'light_env',
@@ -498,6 +399,140 @@ const ChartData = {
       // }
     ]
   },
+  lineChartDataTable: [
+    //name: '碧岭街道',
+    [
+      {
+        name: '求决',
+        data: []
+      },{
+        name: '投诉',
+        data: []
+      },{
+        name: '咨询',
+        data: []
+      },{
+        name: '建议',
+        data: []
+      },{
+        name: '感谢',
+        data: []
+      },{
+        name: '其他',
+        data: []
+      }
+    ],
+    //name: '龙田街道',
+    [
+      {
+        name: '求决',
+        data: []
+      },{
+        name: '投诉',
+        data: []
+      },{
+        name: '咨询',
+        data: []
+      },{
+        name: '建议',
+        data: []
+      },{
+        name: '感谢',
+        data: []
+      },{
+        name: '其他',
+        data: []
+      }
+    ],
+    //name: '马峦街道',
+    [
+      {
+        name: '求决',
+        data: []
+      },{
+        name: '投诉',
+        data: []
+      },{
+        name: '咨询',
+        data: []
+      },{
+        name: '建议',
+        data: []
+      },{
+        name: '感谢',
+        data: []
+      },{
+        name: '其他',
+        data: []
+      }
+    ],
+    //name: '石井街道',
+    [
+      {
+        name: '求决',
+        data: []
+      },{
+        name: '投诉',
+        data: []
+      },{
+        name: '咨询',
+        data: []
+      },{
+        name: '建议',
+        data: []
+      },{
+        name: '感谢',
+        data: []
+      },{
+        name: '其他',
+        data: []
+      }
+    ],
+    //name: '坪山街道',
+    [
+      {
+        name: '求决',
+        data: []
+      },{
+        name: '投诉',
+        data: []
+      },{
+        name: '咨询',
+        data: []
+      },{
+        name: '建议',
+        data: []
+      },{
+        name: '感谢',
+        data: []
+      },{
+        name: '其他',
+        data: []
+      }
+    ],
+    //name: '坑梓街道',
+    [
+      {
+        name: '求决',
+        data: []
+      },{
+        name: '投诉',
+        data: []
+      },{
+        name: '咨询',
+        data: []
+      },{
+        name: '建议',
+        data: []
+      },{
+        name: '感谢',
+        data: []
+      },{
+        name: '其他',
+        data: []
+      }
+    ]
+  ],
 };
 
 export default {
@@ -533,142 +568,13 @@ export default {
       count:0,
       state:"全部",
       lineChartXNames: [],
-      lineChartDataTable: [
-        //name: '碧岭街道',
-        [
-          {
-            name: '求决',
-            data: []
-          },{
-            name: '投诉',
-            data: []
-          },{
-            name: '咨询',
-            data: []
-          },{
-            name: '建议',
-            data: []
-          },{
-            name: '感谢',
-            data: []
-          },{
-            name: '其他',
-            data: []
-          }
-        ],
-        //name: '龙田街道',
-        [
-          {
-            name: '求决',
-            data: []
-          },{
-            name: '投诉',
-            data: []
-          },{
-            name: '咨询',
-            data: []
-          },{
-            name: '建议',
-            data: []
-          },{
-            name: '感谢',
-            data: []
-          },{
-            name: '其他',
-            data: []
-          }
-        ],
-        //name: '马峦街道',
-        [
-          {
-            name: '求决',
-            data: []
-          },{
-            name: '投诉',
-            data: []
-          },{
-            name: '咨询',
-            data: []
-          },{
-            name: '建议',
-            data: []
-          },{
-            name: '感谢',
-            data: []
-          },{
-            name: '其他',
-            data: []
-          }
-        ],
-        //name: '石井街道',
-        [
-          {
-            name: '求决',
-            data: []
-          },{
-            name: '投诉',
-            data: []
-          },{
-            name: '咨询',
-            data: []
-          },{
-            name: '建议',
-            data: []
-          },{
-            name: '感谢',
-            data: []
-          },{
-            name: '其他',
-            data: []
-          }
-        ],
-        //name: '坪山街道',
-        [
-          {
-            name: '求决',
-            data: []
-          },{
-            name: '投诉',
-            data: []
-          },{
-            name: '咨询',
-            data: []
-          },{
-            name: '建议',
-            data: []
-          },{
-            name: '感谢',
-            data: []
-          },{
-            name: '其他',
-            data: []
-          }
-        ],
-        //name: '坑梓街道',
-        [
-          {
-            name: '求决',
-            data: []
-          },{
-            name: '投诉',
-            data: []
-          },{
-            name: '咨询',
-            data: []
-          },{
-            name: '建议',
-            data: []
-          },{
-            name: '感谢',
-            data: []
-          },{
-            name: '其他',
-            data: []
-          }
-        ]
-      ],
+      lineChartDataTable: ChartData.lineChartDataTable,
       lineChartSelect: null,
-      lineChartData: null,
+      lineChartData: {  //这里一定不能设为null，不然会报错。页面初始化的时候会画一张图。所以可以把lineChartData初始化为空图（但是不能为null！！！）
+        title: "loading",
+        xnames: [],
+        data: ChartData.lineChartDataTable[0]
+      },
 
       Month: getNowDate(),
       Month2: getNowDate(),
@@ -701,8 +607,8 @@ export default {
   },
   beforeMount() {
     //初始化曲线图数据
+    this.lineChartSelect = 0;
     this.updateLineChartData();
-    this.handleSetLineChartData(0);
   },
   created() {
     getEmails(1, 30).then(resp => {
@@ -712,6 +618,10 @@ export default {
     getDataVersion().then(resp => {
       if(this.dataVersion != resp.data){
         this.dataVersion = resp.data;
+
+        //初始化曲线图数据
+        //this.updateLineChartData();
+
         this.monthChange(this.Month);//实时更新BarChart
         this.dateChange1(this.date1);//实时更新PieChart
 
@@ -726,10 +636,6 @@ export default {
         this.setData(this.page,this.state);//实时更新最近发生事件列表
 
         this.monthChange3(this.Month3);//实时更新地图数据
-
-        // //初始化曲线图数据
-        // this.updateLineChartData();
-        // this.handleSetLineChartData(0);
       }
     })
 
@@ -880,12 +786,7 @@ export default {
     },
     handleSetLineChartData(type) {
       this.lineChartSelect = type;
-      var new_data = {
-        title: street_name[type] + "近7天各事件类型数量走势",
-        xnames: this.lineChartXNames,
-        data: this.lineChartDataTable[type]
-      };
-      this.lineChartData = new_data;
+      this.applyLineChartSelect();
     },
     dateChange1(date) {
       this.date1 = date
@@ -1039,8 +940,6 @@ export default {
       }
     },
     updateLineChartData() {
-      this.clearLineChartData();
-
       const day = 24*60*60*1000;
       var now = new Date();
       //假装今天是2018/10/30
@@ -1068,9 +967,12 @@ export default {
           });
         }
 
+        this.clearLineChartData();
         for (var i = 0; i < 7; ++i) {
           this.pushLineChartData(data[i]);
         }
+
+        this.applyLineChartSelect();
       });
     },
     pushLineChartData(new_day) {
@@ -1081,6 +983,16 @@ export default {
         }
       }
     },
+    applyLineChartSelect() {
+      var tmp = {
+        title: street_name[this.lineChartSelect] + "近7天各事件类型数量走势",
+        xnames: this.lineChartXNames,
+        data: this.lineChartDataTable[this.lineChartSelect]
+      };
+      if (JSON.stringify(tmp) !== JSON.stringify(this.lineChartData)) {
+        this.lineChartData = deep_copy(tmp);
+      }
+    }
   }
 };
 </script>

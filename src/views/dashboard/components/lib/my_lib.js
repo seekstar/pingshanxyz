@@ -21,3 +21,7 @@ export function shallow_copy_array(arr) {
     }
     return ret;
 }
+
+export function deep_copy(obj) {
+    return JSON.parse(JSON.stringify(obj));
+}
