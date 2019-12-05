@@ -605,11 +605,11 @@ export default {
       listLoading:false
     };
   },
-  beforeMount() {
+  /*beforeMount() {
     //初始化曲线图数据
     this.lineChartSelect = 0;
     this.updateLineChartData();
-  },
+  },*/
   created() {
     getEmails(1, 30).then(resp => {
       console.log(resp.data)
@@ -620,7 +620,8 @@ export default {
         this.dataVersion = resp.data;
 
         //初始化曲线图数据
-        //this.updateLineChartData();
+        this.lineChartSelect = 0;
+        this.updateLineChartData();
 
         this.monthChange(this.Month);//实时更新BarChart
         this.dateChange1(this.date1);//实时更新PieChart
