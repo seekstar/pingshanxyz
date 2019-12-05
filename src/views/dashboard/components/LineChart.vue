@@ -10,6 +10,8 @@ import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
+import { the_same } from "./lib/object_diff";
+
 const colors = ['red', 'blue', 'orange', 'black', 'green', 'purple'];
 function gen_series(data) {
   var ret = [];
@@ -29,6 +31,9 @@ function gen_series(data) {
   }
   return ret
 }
+
+var last_data = null;
+
 export default {
   mixins: [resize],
   props: {
@@ -81,45 +86,52 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-      this.setOptions(this.chartData)
+      //this.setOptions(this.chartData)
     },
     setOptions(data) {
-      this.chart.setOption({
-        title: {
-            text: data.title,
-        },
-        xAxis: {
-          data: data.xnames,
-          boundaryGap: false,
-          axisTick: {
-            show: false
-          }
-        },
-        grid: {
-          left: 10,
-          right: 40,
-          bottom: 20,
-          top: 30,
-          containLabel: true
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
+      //console.log(the_same(data, last_data));
+      if (!the_same(data, last_data)) {
+        //console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(last_data));
+        
+        last_data = JSON.parse(JSON.stringify(data));
+        this.chart.setOption({
+          title: {
+              text: data.title,
           },
-          padding: [5, 10]
-        },
-        yAxis: {
-          axisTick: {
-            show: false
-          }
-        },
-        color: colors.slice(0, data.data.length),
-        legend: {
-          data: data.data.name,
-        },
-        series: gen_series(data.data)
-      })
+          xAxis: {
+            data: data.xnames,
+            boundaryGap: false,
+            axisTick: {
+              show: false
+            }
+          },
+          grid: {
+            left: 10,
+            right: 40,
+            bottom: 20,
+            top: 30,
+            containLabel: true
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross'
+            },
+            padding: [5, 10]
+          },
+          yAxis: {
+            axisTick: {
+              show: false
+            }
+          },
+          color: colors.slice(0, data.data.length),
+          legend: {
+            data: data.data.name,
+          },
+          series: gen_series(data.data)
+        })
+      }
     }
   }
 }

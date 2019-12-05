@@ -684,7 +684,7 @@ export default {
           }
         ]
       ],
-      lastLineChartType: null,
+      lineChartSelect: null,
       lineChartData: null,
 
       Month: getNowDate(),
@@ -895,7 +895,7 @@ export default {
       });
     },
     handleSetLineChartData(type) {
-      this.lastLineChartType = type;
+      this.lineChartSelect = type;
       var new_data = {
         title: street_name[type] + "近7天各事件类型数量走势",
         xnames: this.lineChartXNames,
