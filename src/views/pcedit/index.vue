@@ -169,7 +169,7 @@ export default {
         Message({
           message: "所属街道未填写！请填写所属街道！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -178,7 +178,7 @@ export default {
         Message({
           message: "所属社区填写错误！没有这个社区！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -187,7 +187,7 @@ export default {
         Message({
           message: "事件类型填写错误！没有这个事件类型！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -196,7 +196,7 @@ export default {
         Message({
           message: "事件大类填写错误！没有这个事件大类！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -205,7 +205,7 @@ export default {
         Message({
           message: "事件小类填写错误！没有这个事件小类！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -214,7 +214,7 @@ export default {
         Message({
           message: "处理部门填写错误！没有这个部门！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -223,7 +223,7 @@ export default {
         Message({
           message: "平台渠道未填写！请填写平台渠道！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -232,7 +232,7 @@ export default {
         Message({
           message: "事件性质未填写！请填写事件性质！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -242,7 +242,7 @@ export default {
         Message({
           message: "事件登记成功！",
           type: "success",
-          duration: 5 * 1000
+          duration: 1000
         });
       })
     },

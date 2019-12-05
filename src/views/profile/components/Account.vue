@@ -212,7 +212,7 @@ export default {
         Message({
           message: "密码不一致！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -220,7 +220,7 @@ export default {
         Message({
           message: "修改成功",
           type: "success",
-          duration: 5 * 1000
+          duration: 1000
         });
       })
     },
@@ -240,7 +240,7 @@ export default {
         Message({
           message: "电话号码格式填写错误！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -249,7 +249,7 @@ export default {
         Message({
           message: "所属部门填写错误！没有这个部门！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -258,7 +258,7 @@ export default {
         Message({
           message: '个人信息修改成功！',
           type: 'success',
-          duration: 5 * 1000
+          duration: 1000
         })
       })
     },

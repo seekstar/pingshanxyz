@@ -185,7 +185,7 @@ export default {
         Message({
           message: "电话号码格式填写错误！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -203,7 +203,7 @@ clearInterval(this.interval)
         Message({
               message: "发送成功",
               type: "success",
-              duration: 5 * 1000
+              duration: 1000
             });
       }
       )
@@ -213,7 +213,7 @@ clearInterval(this.interval)
         Message({
           message: "密码不一致！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -221,7 +221,7 @@ clearInterval(this.interval)
         Message({
           message: "电话号码格式填写错误！",
           type: "error",
-          duration: 5 * 1000
+          duration: 1000
         });
         return;
       }
@@ -230,7 +230,7 @@ clearInterval(this.interval)
         Message({
               message: "修改成功",
               type: "success",
-              duration: 5 * 1000
+              duration: 1000
             });
       }
       )

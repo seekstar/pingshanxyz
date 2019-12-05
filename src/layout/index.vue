@@ -55,7 +55,9 @@ export default {
   data(){
     return {
       allErrorLog: [],
-      interval: null
+      nowErrorLog: [],
+      interval: null,
+      interval2: null
     }
   },
   beforeMount(){
@@ -70,6 +72,7 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.interval)
+    clearInterval(this.interval2)
   },
   methods: {
     handleClickOutside() {
@@ -77,22 +80,36 @@ export default {
     },
     setAbnormalData(){
       getAbnormalData().then(resp => {
-        //console.log(resp.data)
         for(let item of resp.data){
           if(this.allErrorLog.indexOf(item) == -1){
-            Message({
-              message: item,
-              type: "error",
-              duration: 5 * 1000
-            });
-            this.$store.dispatch('errorLog/addErrorLog',
-              {
-                err:{
-                  message: item
+            this.$store.dispatch('errorLog/addErrorLog', { err: { message: item } });
+            this.allErrorLog.push(item);
+            this.nowErrorLog.push(item);
+            if(this.interval2 === null){
+              /* 先执行一次 */
+              Message({
+                message: this.nowErrorLog[0],
+                type: "error",
+                duration: 5 * 1000
+              });
+              this.nowErrorLog = this.nowErrorLog.slice(1);
+
+              /* 设置定时器，每个5000ms都是上次error消息的显示时间 */
+              this.interval2 = setInterval( () => {
+                if(this.nowErrorLog.length == 0){
+                  clearInterval(this.interval2);
+                  this.interval2 = null;
+                  return;
+                }else{
+                  Message({
+                    message: this.nowErrorLog[0],
+                    type: "error",
+                    duration: 5 * 1000
+                  });
+                  this.nowErrorLog = this.nowErrorLog.slice(1);
                 }
-              }
-            )
-            this.allErrorLog.push(item)
+              }, 5000)
+            }
           }
         }
       })

@@ -26,3 +26,15 @@ export function sendEmail(form) {
     }
   })
 }
+
+export function changeIsread(id, isread) {
+  return request({
+    url: '/mail',
+    method: 'put',
+    data: {
+      'id': id,
+      'isread': isread
+    }
+  })
+}
+
