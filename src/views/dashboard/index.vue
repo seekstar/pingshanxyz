@@ -153,27 +153,6 @@
           <ping-shan-map :chart-data="pingShanMapData" />
         </el-row>
       </el-col>
-
-      <!-- <el-col
-        :xs="{span: 24}"
-        :sm="{span: 12}"
-        :md="{span: 12}"
-        :lg="{span: 6}"
-        :xl="{span: 6}"
-        style="margin-bottom:30px;"
-      >
-        <todo-list />
-      </el-col>
-      <el-col
-        :xs="{span: 24}"
-        :sm="{span: 12}"
-        :md="{span: 12}"
-        :lg="{span: 6}"
-        :xl="{span: 6}"
-        style="margin-bottom:30px;"
-      >
-        <box-card />
-      </el-col> -->
     </el-row>
     <el-tooltip placement="top" content="返回顶部">
       <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
@@ -772,7 +751,8 @@ export default {
     }, 1000)
   },
   beforeDestroy() {
-    clearInterval(this.interval)
+    clearInterval(this.interval);
+    this.interval = null;
   },
   methods: {
     setPieChartData(from, to) {
