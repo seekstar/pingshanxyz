@@ -958,7 +958,8 @@ export default {
               day_data.push(new Array(type_num).fill(0));
           }
           for (let rec of resp[given_date]) {
-              day_data[index_of_street[rec.street]][index_of_type[rec.name]] += rec.value;
+              if(rec.street!='-' && rec.name!= '-')
+                day_data[index_of_street[rec.street]][index_of_type[rec.name]] += rec.value;
           }
           data.push({
             date: given_date, 
