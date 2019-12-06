@@ -660,7 +660,6 @@ export default {
           this.setData(this.page,this.state);//实时更新最近发生事件列表
 
           this.monthChange3(this.Month3);//实时更新地图数据
-
           this.updateLineChartData(); //实时更新曲线图数据
         }
       })
@@ -952,7 +951,6 @@ export default {
 
       getTotalNumOfEachTypes(formatted_date).then(resp => {
         resp = resp.data;
-
         var data = [];
         for (let given_date in resp) {
           let day_data = [];
@@ -972,7 +970,6 @@ export default {
         for (var i = 0; i < 7; ++i) {
           this.pushLineChartData(data[i]);
         }
-
         this.applyLineChartSelect();
       });
     },
@@ -990,7 +987,7 @@ export default {
         xnames: this.lineChartXNames,
         data: this.lineChartDataTable[this.lineChartSelect]
       };
-      if (JSON.stringify(tmp) !== JSON.stringify(this.lineChartData)) {
+      if (JSON.stringify(tmp) != JSON.stringify(this.lineChartData)) {
         this.lineChartData = deep_copy(tmp);
       }
     }

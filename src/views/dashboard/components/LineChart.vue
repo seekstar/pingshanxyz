@@ -32,7 +32,7 @@ function gen_series(data) {
   return ret
 }
 
-var last_data = null;
+
 
 export default {
   mixins: [resize],
@@ -91,8 +91,7 @@ export default {
       //this.setOptions(this.chartData)
     },
     setOptions(data) {
-      if (!the_same(data, last_data)) {
-        last_data = JSON.parse(JSON.stringify(data));
+ 
         this.chart.setOption({
           title: {
               text: data.title,
@@ -129,7 +128,7 @@ export default {
           },
           series: gen_series(data.data)
         })
-      }
+      
     }
   }
 }
